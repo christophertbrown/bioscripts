@@ -551,7 +551,7 @@ def plot_by_gene_and_domain(name, seqs, tax, id2name):
     for gene in set([seq[0] for seq in list(seqs.values())]):
         for domain in set([seq[1] for seq in list(seqs.values())]):
             plot_insertions(name, seqs, gene, domain, tax, id2name)
-    
+
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         print('usage: rRNA_insertions.py <[16,23]SfromHMM-out.masked.fa> <tax-mapping.tsv or False>')
