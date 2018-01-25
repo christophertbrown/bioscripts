@@ -48,7 +48,7 @@ note: -l 10 specifies that insertions >= 10 bp are removed
 
 `$ rRNA_insertions.py <seqs.16S.fa> <False or tax_table.tsv>`
 
-## find orthologs between pairs of genomes using orthologer.py 
+## ortholog identification between pairs of genomes using orthologer.py 
 
 * orthologer.py conducts reciprocal usearch similarity searches between pairs of provided genomes to identify reciprocal best hits
 
@@ -66,7 +66,7 @@ Mode can be either "reference" or "global."
 
 In "reference" mode all searches will be conducted against the first genome that is listed. In "global" mode all possible pairwise searches are conducted between the listed genomes (# searches = #genomes^#genomes). 
 
-## get hierarchical taxonomy using id2tax.py
+## hierarchical taxonomy using id2tax.py
 
 id2tax.py is a script for getting the NCBI hierarchical taxonomy for a lineage based on the name of the lineage, an NCBI TaxID, or an organism GI number.
 
