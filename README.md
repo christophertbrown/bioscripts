@@ -26,7 +26,7 @@ Scripts require Python 3 and Infernal. rRNA_insertions.py also requires HMMER 3 
 
 23S CM: databases/23S.cm
 
-* use env. variable to reference databases (optional)
+### use env. variable to reference databases (optional)
 
 `export ssucmdb="databases/ssu-align-0p1.1.cm"`
 
@@ -40,20 +40,43 @@ Scripts require Python 3 and Infernal. rRNA_insertions.py also requires HMMER 3 
 
 * remove insertions (useful for phylogenetic analyses)
 
-`$ strip_masked.py -f <sequences.16S.fa> -l 10`
+`$ strip_masked.py -f <seqs.16S.fa> -l 10 > <seqs.16S.s10.fa>`
 
-note: -l 10 specifies that insertions >= 10 bp are removed (this is what I usually do)
+note: -l 10 specifies that insertions >= 10 bp are removed
 
 ### analyze insertions
 
 `$ rRNA_insertions.py <seqs.16S.fa> <False or tax_table.tsv>`
 
-## id2tax.py
+## find orthologs between pairs of genomes using orthologer.py 
+
+* orthologer.py conducts reciprocal usearch similarity searches between pairs of provided genomes to identify reciprocal best hits
+
+* genomes can be supplied as either gene or protein multi-fasta files (one file per genome; each ORF must have a unique identifier)
+
+### requirements
+
+* Python 3 and `usearch`
+
+### usage
+
+`$ orthologer.py <mode> <genome1> <genome2> <genome...> > orthologer.out`
+
+Mode can be either "reference" or "global." 
+
+In "reference" mode all searches will be conducted against the first genome that is listed. In "global" mode all possible pairwise searches are conducted between the listed genomes (# searches = #genomes^#genomes). 
+
+## get hierarchical taxonomy using id2tax.py
 
 id2tax.py is a script for getting the NCBI hierarchical taxonomy for a lineage based on the name of the lineage, an NCBI TaxID, or an organism GI number.
 
+### requirements
+
 * requires python 2.7 and that tokyocabinet be installed within your python 2.7 path
 * requires "databases" env. variable that specifies the path where a "ncbi" directory will be created for storing taxonomy databases
+
+### notes
+
 * taxonomy databases are created the first time the script is run (usually takes ~1 day to generate) 
 * Note: taxonomy databases are downloaded from NCBI and will need to be updated periodically
 * for help see `id2tax.py -h`
