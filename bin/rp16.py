@@ -150,6 +150,7 @@ def find_ribosomal(rps, scaffolds, s2rp, min_hits, max_hits_rp, max_errors):
             yield scaffold, block
 
 def ribosomal(scaffolds, DBdir, min_hits, evalue_thresh, bit_thresh, \
+                method = 'usearch', threads = 6, \
                 max_hits = 1, max_hits_rp = 1, max_errors = 35):
     """
     find ribosomal proteins
@@ -162,7 +163,7 @@ def ribosomal(scaffolds, DBdir, min_hits, evalue_thresh, bit_thresh, \
     # rps = list (in syntenic order) of ribosomal proteins
     # rp_db = dictionary to find the database files
     rps, rp_db = find_databases(DBdir)
-    searches = [[rp, search(scaffolds, rp_db[rp], method = 'usearch', max_hits = 10)]
+    searches = [[rp, search(scaffolds, rp_db[rp], method = method, threads = str(threads), max_hits = 10)]
             for rp in rp_db]
     scaffolds, scaffold2rp = scaffold_hits(searches, scaffolds, max_hits)
     print('# scaffold\t%s' % ('\t'.join(rps)))
@@ -194,15 +195,23 @@ if __name__ == '__main__':
             '-e', required = False, default = float(1e-6), type = float, \
             help = 'maximum evalue to consider as hit (default = 1e-6)')
     parser.add_argument(\
+            '-a', required = False, default = 'usearch', type = str, \
+            help = 'algorithm: usearch (default), usearch-cluster, blast')
+    parser.add_argument(\
+            '-t', required = False, default = 6, type = int, \
+            help = 'threads')
+    parser.add_argument(\
             '-b', required = False, default = float(40), type = float, \
             help = 'minimum bit score to consider as hit (default = 40)')
     args = vars(parser.parse_args())
     evalue_thresh, bit_thresh = args['e'], args['b']
     scaffolds, min_hits = args['f'], args['m']
+    method = args['a']
+    threads = args['t']
     DBdir = args['d']
     if 'databases' not in os.environ and DBdir is False:
         print('# specify databases directory', file = sys.stderr)
         exit()
     if DBdir is False:
         DBdir = '%s/rp16/Laura/' % (os.environ['databases'])
-    ribosomal(scaffolds, DBdir, min_hits, evalue_thresh, bit_thresh)
+    ribosomal(scaffolds, DBdir, min_hits, evalue_thresh, bit_thresh, method = method, threads = threads)

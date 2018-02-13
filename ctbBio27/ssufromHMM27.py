@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2.7
 
 """
 script for 1) finding 16S rRNA gene sequences from contigs based on ssu-cmsearch or cmsearch tabular output and 2)
@@ -88,7 +88,7 @@ def find_coordinates(hmms, bit_thresh):
     group2hmm = {} # group2hmm[seq][group] = [model, strand, coordinates, matches, gaps]
     for seq, info in list(seq2hmm.items()):
         group2hmm[seq] = {}
-        # info = [model, [[hit1], [hit2], ...]]
+        # info = [model, [hit1], [hit2], ...]
         for group_num, group in enumerate(hit_groups(info[1])): 
             # group is a group of hits to a single 16S gene
             # determine matching strand based on best hit
@@ -113,8 +113,8 @@ def get_info(line, bit_thresh):
         mstart, mend = int(line[5]), int(line[6])
     elif len(line) == 9: # output is from ssu-cmsearch
         if bit_thresh == 0:
-            print('# ssu-cmsearch does not include a model-specific inclusion threshold, ', file=sys.stderr)
-            print('# please specify a bit score threshold', file=sys.stderr)
+            print >> sys.stderr, '# ssu-cmsearch does not include a model-specific inclusion threshold, '
+            print >> sys.stderr, '# please specify a bit score threshold'
             exit()
         id, model, bit = line[1].split()[0], line[0], float(line[6])
         inc = '!' # this is not a feature of ssu-cmsearch
@@ -125,8 +125,8 @@ def get_info(line, bit_thresh):
         else:
             strand = '-'
     else:
-        print('# unsupported hmm format:', file=sys.stderr)
-        print('# provide tabular output from ssu-cmsearch and cmsearch supported', file=sys.stderr)
+        print >> sys.stderr, '# unsupported hmm format:'
+        print >> sys.stderr, '# provide tabular output from ssu-cmsearch and cmsearch supported'
         exit()
     coords = [sstart, send]
     sstart, send = min(coords), max(coords)
@@ -158,10 +158,7 @@ def mask_sequence(seq, gaps):
     seq = [i.upper() for i in seq]
     for gap in gaps:
         for i in range(gap[0] - 1, gap[1]):
-            try:
-                seq[i] = seq[i].lower()
-            except:
-                continue
+            seq[i] = seq[i].lower()
     return ''.join(seq)
 
 def check_buffer(coords, length, buffer):
@@ -236,7 +233,7 @@ def run_cmsearch(fastas, threads, cm):
                     % (threads, cmsearch, cm, fasta.name), shell = True)
             p.communicate()
         else:
-            print('# cmsearch output found: %s' % (cmsearch), file=sys.stderr)
+            print >> sys.stderr, '# cmsearch output found: %s' % (cmsearch)
         out.append(open(cmsearch))
     return out
 
@@ -265,15 +262,15 @@ if __name__ == '__main__':
     args = vars(parser.parse_args())
     # make sure either a cmsearch table or the number of cpus to use for running cmsearch is specified
     if args['c'] is False and args['t'] is False:
-        print('specify: -c <cmsearch table> or -t <number of cpus for running cmsearch>', file=sys.stderr)
+        print >> sys.stderr, 'specify: -c <cmsearch table> or -t <number of cpus for running cmsearch>'
         exit()
     # make sure that fasta is not from stdin if cmsearch table is not provided
     if args['c'] is False and args['f'][0] == '-':
-        print('specify: -c <cmsearch table> or -f <fasta file, not stdin>', file=sys.stderr)
+        print >> 'specify: -c <cmsearch table> or -f <fasta file, not stdin>'
         exit()
     # check if either fasta or cmsearch is from stdin
     if args['f'][0] == '-' and args['c'] == False:
-        print('specify: -f <fasta file, not stdin> or -c <cmsearch table>', file=sys.stderr)
+        print >> 'specify: -f <fasta file, not stdin> or -c <cmsearch table>'
         exit()
     for i in 'f' 'c':
         if args[i] is False:
@@ -285,15 +282,15 @@ if __name__ == '__main__':
     # if cmsearch output not specified, run cmsearch
     if args['c'] is False:
         if args['d'] is False and 'ssucmdb' not in os.environ:
-            print('specify: -d <cmsearch database>', file=sys.stderr)
+            print >> 'specify: -d <cmsearch database>'
             exit()
         if args['d'] is False:
             cm = os.environ['ssucmdb']
-            print('# 16S rRNA CM: %s' % (cm), file=sys.stderr)
+            print >> '# 16S rRNA CM: %s' % (cm)
         else:
             cm = args['d']
         args['c'] = run_cmsearch(args['f'], args['t'], cm)
     fastas, hmms, bit_thresh, length_thresh, masking, buffer = \
             args['f'], args['c'], float(args['bit']), int(args['l']), args['m'], int(args['b'])
     for seq in find_16S(fastas, hmms, bit_thresh, length_thresh, masking, buffer):
-        print('\n'.join(seq))
+        print '\n'.join(seq)

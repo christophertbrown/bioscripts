@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 """
 script for mapping reads against scaffolds
@@ -55,7 +55,7 @@ def chunks(l, n):
 def crossmap(fas, reads, options, no_shrink, keepDB, threads, cluster, nodes):
     """
     map all read sets against all fasta files
-    """ 
+    """
     if cluster is True:
         threads = '48'
     btc = []
@@ -73,7 +73,8 @@ def crossmap(fas, reads, options, no_shrink, keepDB, threads, cluster, nodes):
                         fa.rsplit('/', 1)[-1], f.rsplit('/', 1)[-1].rsplit('.', 3)[0])
                 btc.append(bowtie(sam, btd, f, r, u, options, no_shrink, threads))
         else:
-            f = r = False
+            f = False
+            r = False
             for u in U:
                 sam = '%s/%s-vs-%s' % (os.getcwd(), \
                         fa.rsplit('/', 1)[-1], u.rsplit('/', 1)[-1].rsplit('.', 3)[0])
@@ -86,7 +87,7 @@ def crossmap(fas, reads, options, no_shrink, keepDB, threads, cluster, nodes):
         ID = ''.join(random.choice([str(i) for i in range(0, 9)]) for _ in range(5))
         for node, commands in enumerate(chunks(btc, nodes), 1):
             bs = open('%s/crossmap-qsub.%s.%s.sh' % (os.getcwd(), ID, node), 'w')
-            print >> bs, '\n'.join(commands)
+            print('\n'.join(commands), file=bs)
             bs.close()
             p = subprocess.Popen(\
                     'echo \"bash %s\" | qsub -N crossmap -l nodes=1:ppn=24,mem=230gb -m e' \
@@ -124,7 +125,7 @@ if __name__ == '__main__':
     args = vars(parser.parse_args())
     fa = [os.path.abspath(i) for i in args['f']]
     if (args['1'] is False or args['2'] is False) and args['U'] is False:
-        print >> sys.stderr, '# specify -1 and -2 and/or -U'
+        print('# specify -1 and -2 and/or -U', file=sys.stderr)
         exit()
     if args['1'] is not False:
         f = [os.path.abspath(i) for i in args['1']]

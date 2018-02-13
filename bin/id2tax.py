@@ -35,6 +35,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import os
 import sys
 import argparse
+from check import check as check
 
 # tokyo
 sys.path.append('/home/cbrown/programs/python')
@@ -46,13 +47,10 @@ ncbi = {'gi_taxid_prot.dmp': ['gi2taxid.tch'], \
         'names.dmp': ['names2ids.tch', 'ids2names.tch'], \
         'nodes.dmp': ['nodes.tch'] \
         }
-
 if 'databases' not in os.environ:
-    print 'specify path to directory for storing databases using env. variable: databases'
-    exit()
+    directory = '/home/cbrown/databases/ncbi'
 else:
     directory = '%s/ncbi' % (os.environ['databases'])
-
 taxdir = directory + '/taxonomy'
 
 # hierarchy
@@ -79,10 +77,10 @@ def get_tchs():
 
 def download_file(file):
     tch = [ncbi[file][0], '%s/%s' % (taxdir, ncbi[file][0])]
-    if os.path.exists(tch[1]) is False:
+    if check(tch[1]) is False:
         os.system('mkdir -p %s' % (taxdir))
         location = '%s/%s' % (taxdir, file)
-        if os.path.exists(location) is False:
+        if check(location) is False:
             if tch[0] == 'gi2taxid.tch':
                 os.system('wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/%s.gz -P %s' % (file, taxdir))
                 os.system('gunzip %s/%s.gz' % (taxdir, file))
@@ -93,7 +91,7 @@ def download_file(file):
         
 def make_tch(file):
     tch = [ncbi[file][0], '%s/%s' % (taxdir, ncbi[file][0])]
-    if os.path.exists(tch[1]) is False:
+    if check(tch[1]) is False:
         if tch[0] == 'gi2taxid.tch':
             db = hash.Hash()
             db.open(tch[1])
