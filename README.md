@@ -18,7 +18,9 @@ E. P. Nawrocki, "Structural RNA Homology Search and Alignment using Covariance M
 
 ### requirements
 
-Scripts require Python 3 and Infernal. rRNA_insertions.py also requires HMMER 3 and Pfam (use databases env. variable: $databases/pfam/Pfam-A.hmm). 
+* Scripts require Python 3 and Infernal. 
+
+* rRNA_insertions.py also requires HMMER 3 and Pfam (use databases env. variable: $databases/pfam/Pfam-A.hmm). 
 
 ### databases
 
@@ -57,11 +59,17 @@ There are options for customizing trees with respect to reference sets and rooti
 This is a combination of several scripts that can be used independently for phylogenetic analyses.
 
 `16SfromHMM.py` find ssu rRNA gene sequences (see also `23SfromHMM.py`)
+
 `rax.py` run FastTree and/or RAxML
+
 `search.py` run blast and/or usearch
+
 `numblast.py` get top blast/usearch hits (b6 format)
+
 `stockholm2fa.py` convert stockholm to fasta
+
 `nr_fasta.py` remove sequences in fasta file with same name, or re-name them
+
 `strip_masked.py` remove masked sequence in fasta file
 
 ### requirements
@@ -69,10 +77,10 @@ This is a combination of several scripts that can be used independently for phyl
 * python 2.7
 * biopython
 * tokyocabinet
-* ["usearch"](https://www.drive5.com/usearch/)
-* ["SSU-Align"](http://eddylab.org/software/ssu-align/)
-* ["FastTree2"](http://www.microbesonline.org/fasttree/)
-* ["RAxML (optional)"](https://sco.h-its.org/exelixis/web/software/raxml/index.html)
+* [usearch](https://www.drive5.com/usearch/)
+* [SSU-Align](http://eddylab.org/software/ssu-align/)
+* [FastTree2](http://www.microbesonline.org/fasttree/)
+* [RAxML (optional)](https://sco.h-its.org/exelixis/web/software/raxml/index.html)
 
 ### example usage
 
@@ -93,17 +101,25 @@ This will align the sequences and run a FastTree. You can also have it run a rax
 ### env. variables for specifying database locations
 
 #### CMs
+
 export ssucmdb="databases/ssu-align-0p1.1.cm"
+
 export lsucmdb="/data1/bio_db/ssu/23S.cm"
 
 #### ssu rRNA gene database (optional)
-export ssuref="PATH TO DATABASE FASTA e.g. ["Silva"](https://www.arb-silva.de)"
+
+export ssuref="PATH TO DATABASE FASTA e.g. [Silva](https://www.arb-silva.de)"
 
 #### pre-aligned reference sets (optional)
+
 export ssual_ref_archaea="databases/ssu_refs_archaea-archaea.afa"
+
 export ssual_ref_bacteria="databases/ssu_refs_bacteria-bacteria.afa"
+
 export ssual_ref_eukarya="databases/ssu_refs_eukarya-eukarya.afa"
+
 export ssual_ref_prok_archaea="databases/ssu_refs_prok-archaea.afa"
+
 export ssual_ref_prok_bacteria="databases/ssu_refs_prok-bacteria.afa"
 
 **Note:** include full paths.
