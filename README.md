@@ -18,15 +18,14 @@ E. P. Nawrocki, "Structural RNA Homology Search and Alignment using Covariance M
 
 ### requirements
 
-* Scripts require Python 3 and Infernal. 
-
-* rRNA_insertions.py also requires HMMER 3 and Pfam (use databases env. variable: $databases/pfam/Pfam-A.hmm). 
+* python3 
+* [infernal](http://eddylab.org/infernal/)
+* rRNA_insertions.py requires HMMER3 and Pfam (use databases env. variable: $databases/pfam/Pfam-A.hmm). 
 
 ### databases
 
-16S CM: databases/ssu-align-0p1.1.cm
-
-23S CM: databases/23S.cm
+* 16S CM: databases/ssu-align-0p1.1.cm
+* 23S CM: databases/23S.cm
 
 ### use env. variable to reference databases (optional)
 
@@ -74,7 +73,7 @@ This is a combination of several scripts that can be used independently for phyl
 
 ### requirements
 
-* python 2.7
+* python2.7
 * biopython
 * tokyocabinet
 * [usearch](https://www.drive5.com/usearch/)
@@ -132,7 +131,8 @@ export ssual_ref_prok_bacteria="databases/ssu_refs_prok-bacteria.afa"
 
 ### requirements
 
-* Python 3 and `usearch`
+* python3
+* `usearch`
 
 ### usage
 
@@ -148,13 +148,14 @@ id2tax.py is a script for getting the NCBI hierarchical taxonomy for a lineage b
 
 ### requirements
 
-* requires python 2.7 and that tokyocabinet be installed within your python 2.7 path
-* requires "databases" env. variable that specifies the path where a "ncbi" directory will be created for storing taxonomy databases
+* python2.7 
+* tokyocabinet
+* "databases" env. variable that specifies the path to where an "ncbi" directory will be created for storing taxonomy databases
 
 ### notes
 
 * taxonomy databases are created the first time the script is run (usually takes ~1 day to generate) 
-* Note: taxonomy databases are downloaded from NCBI and will need to be updated periodically
+* taxonomy databases are downloaded from NCBI and will need to be updated periodically (delete or move the old databases and re-run id2tax.py)
 * for help see `id2tax.py -h`
 
 ### example usage:
