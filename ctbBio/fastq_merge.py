@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-script for merging separate fastq files into 
+script for merging separate fastq files into
 an interleaved fastq file
 """
 

@@ -13,16 +13,16 @@ from glob import glob as glob
 from tokyocabinet import hash
 
 # ctb modules
-from ctbBio27.nr_fasta27 import de_rep as fix_fasta
-from ctbBio27.search27 import search as search_seqs
-from ctbBio27.numblast27 import best as numblast
-from ctbBio27.fasta27 import iterate_fasta as parse_fasta
-from ctbBio27.ssufromHMM27 import find_16S as find_16S
-from ctbBio27.ssufromHMM27 import run_cmsearch as run_cmsearch
-from ctbBio27.strip_masked27 import parse_masked as strip_masked
-from ctbBio27.stockholm2fa27 import stock2fa as stock2fa
-from ctbBio27.rax27 import rax as rax
-from ctbBio27.fasta2tch27 import tch as fasta2tch
+from ctbBio27.nr_fasta import de_rep as fix_fasta
+from ctbBio27.search import search as search_seqs
+from ctbBio27.numblast import best as numblast
+from ctbBio27.fasta import iterate_fasta as parse_fasta
+from ctbBio27.ssufromHMM import find_16S as find_16S
+from ctbBio27.ssufromHMM import run_cmsearch as run_cmsearch
+from ctbBio27.strip_masked import parse_masked as strip_masked
+from ctbBio27.stockholm2fa import stock2fa as stock2fa
+from ctbBio27.rax import rax as rax
+from ctbBio27.fasta2tch import tch as fasta2tch
 
 def remove_char(header):
     remove_characters = ['\'', '/', '\\', ':', ',', '(', ')', ' ', '|', ';',] \

@@ -1,0 +1,6 @@
+# required packages
+networkx
+python-Levenshtein
+numpy
+pandas
+biopython
