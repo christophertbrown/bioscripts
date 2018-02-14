@@ -2,10 +2,6 @@
 
 some useful scripts for working with genomics and sequencing data
 
-# installation
-
-`pip install ctbBio`
-
 ## rRNA identification using 16SfromHMM.py and 23SfromHMM.py
 
 The scripts use `cmsearch` from the Infernal package to do a sequence-based HMM search against 16S and 23S covariance models. The curated model from SSU-Align is used for 16S, and a custom-built model for 23S. The method is similar to what SSU-Align does by default, but accounts for the fact that rRNA genes may contain large insertion sequences. 
