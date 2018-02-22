@@ -118,6 +118,8 @@ def find_orfs(fa, seqs):
             continue
         id = orf[0].split('>')[1].split('_', 1)[0]
         pos = sorted([int(i) for i in orf[0].split()[2:5] if i != '#'])
+        if id not in seqs:
+            continue
         for i, ins in enumerate(seqs[id][2]):
             if check_overlap(pos, ins, 0.90) is True:
                 seqs[id][2][i][4].append(orf)

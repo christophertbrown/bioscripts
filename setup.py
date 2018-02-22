@@ -2,11 +2,11 @@
 
 from distutils.core import setup
 
-version = '0.5'
+version = '0.8'
 
 packages = ['ctbBio', 'ctbBio27']
 
-scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/assemble.py',
+scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/calculate_coverage.py', 'ctbBio/cluster_ani.py', 'ctbBio/compare_aligned.py',
            'ctbBio/concat_align.py', 'ctbBio/crossmap.py', 'ctbBio/fasta.py', 'ctbBio/fasta_length.py',
            'ctbBio/fasta_region.py', 'ctbBio/fasta_stats.py', 'ctbBio/fastq2fasta.py', 'ctbBio/fastq_merge.py',
