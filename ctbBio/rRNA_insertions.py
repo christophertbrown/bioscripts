@@ -148,6 +148,8 @@ def find_introns(fa, seqs, sequences, threads):
         if 'intron' not in type.lower():
             continue
         pos = sorted([start, stop])
+        if id not in seqs:
+            continue
         for i, ins in enumerate(seqs[id][2]):
             if check_overlap(pos, ins, 0.25) is True:
                 seqs[id][2][i][5].append(['>%s_%s %s %s %s-%s' % (id, (i + 1), type, strand, start, stop), sequences[id][1][pos[0]-1:pos[1]]])
