@@ -37,6 +37,7 @@ ctbBio/rRNA_insertions.py
 ctbBio/rax.py
 ctbBio/rc.py
 ctbBio/rp16.py
+ctbBio/rp16_retreive.sh
 ctbBio/sam2fastq.py
 ctbBio/search.py
 ctbBio/shuffle_genome.py

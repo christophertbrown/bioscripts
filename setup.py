@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 
-version = '0.9'
+version = '0.11'
 
 packages = ['ctbBio', 'ctbBio27']
 
@@ -15,7 +15,7 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/mapped.py', 'ctbBio/n50.py', 'ctbBio/name2fasta.py', 'ctbBio/neto.py',
            'ctbBio/nr_fasta.py', 'ctbBio/numblast-pident.py', 'ctbBio/orthologer.py', 'ctbBio/orthologer_summary.py',
            'ctbBio/parallel.py', 'ctbBio/rRNA_copies.py', 'ctbBio/rRNA_insertions.py', 'ctbBio/rax.py',
-           'ctbBio/rc.py', 'ctbBio/rp16.py', 'ctbBio/sam2fastq.py', 'ctbBio/search.py',
+           'ctbBio/rc.py', 'ctbBio/rp16.py', 'ctbBio/rp16_retreive.sh', 'ctbBio/sam2fastq.py', 'ctbBio/search.py',
            'ctbBio/shuffle_genome.py', 'ctbBio/sixframe.py', 'ctbBio/stats.py', 'ctbBio/stockholm2fa.py',
            'ctbBio/stockholm2oneline.py', 'ctbBio/strip_align.py', 'ctbBio/strip_align_inserts.py',
            'ctbBio/strip_masked.py', 'ctbBio/subset_sam.py', 'ctbBio/transform.py',
