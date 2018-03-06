@@ -15,8 +15,8 @@ import argparse
 from subprocess import Popen
 
 # ctb modules
-from fasta import iterate_fasta as parse_fasta
-from rc import reverse_complement as rc
+from ctbBio.fasta import iterate_fasta as parse_fasta
+from ctbBio.rc import reverse_complement as rc
 
 def best_model(seq2hmm):
     """

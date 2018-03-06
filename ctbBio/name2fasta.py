@@ -2,7 +2,7 @@
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def split_fasta(f, id2f):
     """

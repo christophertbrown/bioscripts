@@ -6,7 +6,7 @@ script for getting a specific region of a fasta file
 
 import sys
 import os
-import fasta as fasta_parser
+import ctbBio.fasta as fasta_parser
 
 def positions(region):
 	region = region.split('-')

@@ -7,7 +7,7 @@ ctb@berkeley.edu
 
 draft script
 
-script for finding orthologs and making a table for comparing 
+script for finding orthologs and making a table for comparing
 fasta files or genomes (.faa or .fna ORF predictions) by ordering the output
 
 global or reference modes
@@ -27,16 +27,18 @@ scores = [! ** alignment lenght2 | pidnet2 | evalue2 | bitscore2 ** alignment le
 # - will not need to convert to a set
 # - will need to evaluate the list, and the complete list for redundnacies
 
-import sys
 import os
-from itertools import permutations as permutations
-from search import search as search
-from multiprocessing import Pool as multithread
-from numblast import best as gethits
-from fasta import iterate_fasta as parse_fasta
-from rec_best_blast import rec_hits as rec_best_blast
-from datetime import datetime as datetime
+import sys
 from operator import itemgetter
+from datetime import datetime as datetime
+from multiprocessing import Pool as multithread
+from itertools import permutations as permutations
+
+#ctbBio
+from ctbBio.search import search as search
+from ctbBio.numblast import best as gethits
+from ctbBio.fasta import iterate_fasta as parse_fasta
+from ctbBio.rec_best_blast import rec_hits as rec_best_blast
 
 # global variables
 threads = 4

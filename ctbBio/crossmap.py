@@ -90,7 +90,7 @@ def crossmap(fas, reads, options, no_shrink, keepDB, threads, cluster, nodes):
             print('\n'.join(commands), file=bs)
             bs.close()
             p = subprocess.Popen(\
-                    'echo \"bash %s\" | qsub -N crossmap -l nodes=1:ppn=24,mem=230gb -m e' \
+                    'qsub -V -N crossmap %s' \
                         % (bs.name), \
                     shell = True)
             p.communicate()

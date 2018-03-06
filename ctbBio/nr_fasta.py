@@ -6,7 +6,7 @@ script for dereplicating fasta files based on sequence names (not sequence simil
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def append_index_id(id, ids):
     """

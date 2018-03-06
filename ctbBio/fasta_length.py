@@ -6,8 +6,8 @@ script for reporting the length of sequences in a fasta file
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
-import fasta as fasta_parser
+from ctbBio.fasta import iterate_fasta as parse_fasta
+import ctbBio.fasta as fasta_parser
 
 def get_length(sequence):
     return [sequence[0], len(sequence[1].replace('-', '').replace('.', ''))]

@@ -8,7 +8,7 @@ usearch or blast
 import sys
 import os
 import argparse
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def check_type(fasta):
     nucl = ['A', 'T', 'G', 'C']

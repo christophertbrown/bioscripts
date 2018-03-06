@@ -6,7 +6,7 @@ calculate genome coverage, relative abundance, and absolute abundance
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 from glob import glob as glob
 import numpy
 

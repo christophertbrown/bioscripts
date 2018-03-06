@@ -19,9 +19,9 @@ import numpy
 from operator import itemgetter
 
 # my scripts
-from numblast import best as best_blast
-from search import search as search 
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.numblast import best as best_blast
+from ctbBio.search import search as search 
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def normalize_bit(A, B, bit, id2desc):
     """

@@ -13,7 +13,7 @@ import string as string_gen
 from subprocess import Popen
 
 # ctb
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def check_type(fasta):
     nucl = ['A', 'T', 'G', 'C']

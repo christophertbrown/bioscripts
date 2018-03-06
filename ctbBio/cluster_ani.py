@@ -13,7 +13,7 @@ from networkx import Graph as Graph
 from networkx import connected_components as connected_components
 
 # ctb
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def make_mashes(fastas, mash_file, threads, kmer = 21, force = False):
     """

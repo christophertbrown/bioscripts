@@ -8,7 +8,7 @@ import sys
 import os
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def six_frame(genome, table, minimum = 10):
     """

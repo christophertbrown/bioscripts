@@ -8,7 +8,7 @@ import sys
 import os
 
 # ctb
-from rc import reverse_complement as rc
+from ctbBio.rc import reverse_complement as rc
 
 def print_single(line, rev):
     """

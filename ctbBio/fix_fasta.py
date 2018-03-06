@@ -6,7 +6,7 @@ fix fasta headers so that they don't have weird characters
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 remove_characters = ['/', '\\', ':', ',', '(', ')', ' ', '|', ';',] # characters to remove from headers
 

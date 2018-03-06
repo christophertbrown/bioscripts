@@ -6,8 +6,8 @@ script for determining 16S copy number from read mapping
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
-from mapped import count_mismatches as count_mismatches
+from ctbBio.fasta import iterate_fasta as parse_fasta
+from ctbBio.mapped import count_mismatches as count_mismatches
 
 def get_overlap(a, b):
     """

@@ -2,7 +2,7 @@
 
 import sys
 import os
-from fasta import iterate_fasta as fasta_parser
+from ctbBio.fasta import iterate_fasta as fasta_parser
 
 
 

@@ -9,7 +9,7 @@ script for analyzing rRNA insertions predicted using either 16SfromHMM.py or 23S
 import sys
 import os
 import subprocess
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 from itertools import cycle as cycle
 
 def insertions_from_masked(seq):

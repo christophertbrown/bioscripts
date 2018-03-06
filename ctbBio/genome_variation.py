@@ -18,7 +18,7 @@ from Bio import SeqIO
 from Bio.Alphabet import IUPAC
 
 # ctb
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def parse_sam(sam, qual):
     """

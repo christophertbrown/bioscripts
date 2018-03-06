@@ -6,7 +6,7 @@ script for getting the reverse complement of a nucleotide sequence
 
 import sys
 import os
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 rc = {'A': 'T', \
       'T': 'A', \

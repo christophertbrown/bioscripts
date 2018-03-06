@@ -8,7 +8,7 @@ import os
 import sys
 import argparse
 import pandas as pd
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def parse_cov(cov_table, scaffold2genome):
     """

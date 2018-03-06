@@ -14,9 +14,9 @@ from random import choice
 from operator import itemgetter
 
 # ctb
-from search import search as search
-from numblast import best as numblast
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.search import search as search
+from ctbBio.numblast import best as numblast
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def find_databases(databases):
     """

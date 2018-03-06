@@ -8,7 +8,7 @@ import itertools
 import numpy as np
 #from Levenshtein import ratio as lr
 
-from nr_fasta import de_rep as nr_fasta
+from ctbBio.nr_fasta import de_rep as nr_fasta
 
 def calc_pident(a, b):
     """

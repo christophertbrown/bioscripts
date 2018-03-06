@@ -11,7 +11,7 @@ import argparse
 import numpy as np
 
 # ctb
-from fasta import iterate_fasta as parse_fasta
+from ctbBio.fasta import iterate_fasta as parse_fasta
 
 def plot_dist_normal(s, mu, sigma):
     """
