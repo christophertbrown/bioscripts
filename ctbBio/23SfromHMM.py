@@ -20,7 +20,7 @@ from ctbBio.rc import reverse_complement as rc
 
 def best_model(seq2hmm):
     """
-    determine the best model: archaea, bacteria, eukarya (best score) 
+    determine the best model: archaea, bacteria, eukarya (best score)
     """
     for seq in seq2hmm:
         best = []
@@ -60,9 +60,21 @@ def check_overlap(current, hit, overlap = 200):
             return True
     return False
 
+def check_order(current, hit, overlap = 200):
+    """
+    determine if hits are sequential on model
+    if not, they should be split into different groups
+    """
+    prev_model = current[-1][2:4]
+    hit_model = hit[2:4]
+    if prev_model[1] - hit_model[0] >= overlap:
+        return False
+    else:
+        return True
+
 def hit_groups(hits):
     """
-    * each sequence may have more than one 23S rRNA gene
+    * each sequence may have more than one 16S rRNA gene
     * group hits for each gene
     """
     groups = []
@@ -70,7 +82,7 @@ def hit_groups(hits):
     for hit in sorted(hits, key = itemgetter(0)):
         if current is False:
             current = [hit]
-        elif check_overlap(current, hit) is True:
+        elif ssu.check_overlap(current, hit) is True or check_order(current, hit) is False:
             groups.append(current)
             current = [hit]
         else:

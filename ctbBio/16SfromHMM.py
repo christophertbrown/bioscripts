@@ -20,7 +20,7 @@ from ctbBio.rc import reverse_complement as rc
 
 def best_model(seq2hmm):
     """
-    determine the best model: archaea, bacteria, eukarya (best score) 
+    determine the best model: archaea, bacteria, eukarya (best score)
     """
     for seq in seq2hmm:
         best = []
@@ -60,6 +60,18 @@ def check_overlap(current, hit, overlap = 200):
             return True
     return False
 
+def check_order(current, hit, overlap = 200):
+    """
+    determine if hits are sequential on model
+    if not, they should be split into different groups
+    """
+    prev_model = current[-1][2:4]
+    hit_model = hit[2:4]
+    if prev_model[1] - hit_model[0] >= overlap:
+        return False
+    else:
+        return True
+
 def hit_groups(hits):
     """
     * each sequence may have more than one 16S rRNA gene
@@ -70,7 +82,7 @@ def hit_groups(hits):
     for hit in sorted(hits, key = itemgetter(0)):
         if current is False:
             current = [hit]
-        elif check_overlap(current, hit) is True:
+        elif check_overlap(current, hit) is True or check_order(current, hit) is False:
             groups.append(current)
             current = [hit]
         else:
@@ -89,7 +101,7 @@ def find_coordinates(hmms, bit_thresh):
     for seq, info in list(seq2hmm.items()):
         group2hmm[seq] = {}
         # info = [model, [[hit1], [hit2], ...]]
-        for group_num, group in enumerate(hit_groups(info[1])): 
+        for group_num, group in enumerate(hit_groups(info[1])):
             # group is a group of hits to a single 16S gene
             # determine matching strand based on best hit
             best = sorted(group, reverse = True, key = itemgetter(-1))[0]
@@ -222,7 +234,7 @@ def find_16S(fastas, hmms, bit_thresh = float(20), length_thresh = 500, masking 
                 if strand == '-':
                     S = rc(['', S])[1]
                 yield [header, S]
-    
+
 def run_cmsearch(fastas, threads, cm):
     """
     run cmsearch: comapre 16S sequences to ssu-align's CM
