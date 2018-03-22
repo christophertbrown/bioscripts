@@ -18,7 +18,7 @@ def bowtiedb(fa, keepDB):
     make bowtie db
     """
     btdir = '%s/bt2' % (os.getcwd())
-    # make directory for 
+    # make directory for
     if not os.path.exists(btdir):
         os.mkdir(btdir)
     btdb = '%s/%s' % (btdir, fa.rsplit('/', 1)[-1])

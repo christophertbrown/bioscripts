@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-script for searching a query fasta against a database using either 
+script for searching a query fasta against a database using either
 usearch or blast
 """
 
@@ -171,7 +171,7 @@ def usearch(query, db, type, out, threads = '6', evalue = '100', alignment = 'lo
                     -id 0.10 -threads %s %s >> log.txt' \
                     % (usearch_loc, query, db, out, threads, strand))
         elif alignment == 'local' and cluster is True:
-            qsub = 'qsub -l nodes=1:ppn=24 -m e -N usearch'
+            qsub = 'qsub -V -N usearch'
             os.system('echo "%s -ublast `pwd`/%s -db %s -blast6out `pwd`/%s -evalue %s -threads %s %s -maxhits %s >> `pwd`/log.txt" | %s' \
                     % (usearch_loc, query, db, out, evalue, threads, strand, max_hits, qsub))
         else:
