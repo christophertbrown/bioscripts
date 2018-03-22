@@ -218,6 +218,9 @@ if __name__ == "__main__":
             '-a', default = 'usearch', \
             help = 'algorithm: usearch (default), usearch-cluster, blast, phmmer')
     parser.add_argument(\
+            '-m', required = False, default = 100, type = int, \
+            help = 'max. number of hits (default = 100)')
+    parser.add_argument(\
             '-t', default = "6", \
             help = 'threads (default = 6)')
     args = vars(parser.parse_args())

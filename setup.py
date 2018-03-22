@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 
-version = '0.15'
+version = '0.16'
 
 packages = ['ctbBio', 'ctbBio27']
 
