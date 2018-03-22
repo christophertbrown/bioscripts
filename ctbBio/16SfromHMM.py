@@ -62,12 +62,15 @@ def check_overlap(current, hit, overlap = 200):
 
 def check_order(current, hit, overlap = 200):
     """
-    determine if hits are sequential on model
-    if not, they should be split into different groups
+    determine if hits are sequential on model and on the 
+    same strand
+        * if not, they should be split into different groups
     """
     prev_model = current[-1][2:4]
+    prev_strand = current[-1][-2]
     hit_model = hit[2:4]
-    if prev_model[1] - hit_model[0] >= overlap:
+    hit_strand = hit[-2]
+    if (prev_model[1] - hit_model[0] >= overlap) or (prev_strand != hit_strand):
         return False
     else:
         return True
