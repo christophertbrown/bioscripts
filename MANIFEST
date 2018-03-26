@@ -52,16 +52,3 @@ ctbBio/strip_masked.py
 ctbBio/subset_sam.py
 ctbBio/transform.py
 ctbBio/unmapped.py
-ctbBio27/__init__.py
-ctbBio27/fasta.py
-ctbBio27/fasta2tch.py
-ctbBio27/id2tax.py
-ctbBio27/kegginfo.py
-ctbBio27/nr_fasta.py
-ctbBio27/numblast.py
-ctbBio27/rax.py
-ctbBio27/search.py
-ctbBio27/ssu_tree.py
-ctbBio27/ssufromHMM.py
-ctbBio27/stockholm2fa.py
-ctbBio27/strip_masked.py
