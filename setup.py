@@ -2,9 +2,9 @@
 
 from distutils.core import setup
 
-version = '0.17'
+version = '0.18'
 
-packages = ['ctbBio', 'ctbBio27']
+packages = ['ctbBio']
 
 scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/calculate_coverage.py', 'ctbBio/cluster_ani.py', 'ctbBio/compare_aligned.py',
@@ -19,9 +19,9 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/shuffle_genome.py', 'ctbBio/sixframe.py', 'ctbBio/stats.py', 'ctbBio/stockholm2fa.py',
            'ctbBio/stockholm2oneline.py', 'ctbBio/strip_align.py', 'ctbBio/strip_align_inserts.py',
            'ctbBio/strip_masked.py', 'ctbBio/subset_sam.py', 'ctbBio/transform.py',
-           'ctbBio/unmapped.py', 'ctbBio27/id2tax.py', 'ctbBio27/kegginfo.py', 'ctbBio27/ssu_tree.py']
+           'ctbBio/unmapped.py']
 
-classifiers = ['Programming Language :: Python', 'Programming Language :: Python :: 3', 'Programming Language :: Python :: 2.7']
+classifiers = ['Programming Language :: Python', 'Programming Language :: Python :: 3',]
 
 requirements = ['networkx', 'python-Levenshtein', 'numpy', 'pandas', 'biopython'],
 
