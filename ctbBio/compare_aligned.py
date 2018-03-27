@@ -23,7 +23,10 @@ def calc_pident(a, b):
             m += 1
         else:
             mm += 1
-    return float(float(m)/float((m + mm))) * 100
+    try:
+        return float(float(m)/float((m + mm))) * 100
+    except:
+        return 0
 
 def remove_gaps(A, B):
     """
