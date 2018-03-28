@@ -22,7 +22,7 @@ def parse_masked(seq, min_len):
             if masked != [[]] and len(masked[-1]) < min_len:
                 nm.extend(masked[-1])
                 del masked[-1]
-            prev = False 
+            prev = False
         elif base.islower():
             if prev is False:
                 masked.append([])
