@@ -70,7 +70,14 @@ def check_order(current, hit, overlap = 200):
     prev_strand = current[-1][-2]
     hit_model = hit[2:4]
     hit_strand = hit[-2]
-    if (prev_model[1] - hit_model[0] >= overlap) or (prev_strand != hit_strand):
+    # make sure they are on the same strand
+    if prev_strand != hit_strand:
+        return False
+    # check for sequential hits on + strand
+    if prev_strand == '+' and (prev_model[1] - hit_model[0] >= overlap):
+        return False
+    # check for sequential hits on - strand
+    if prev_strand == '-' and (hit_model[1] - prev_model[0] >= overlap):
         return False
     else:
         return True
