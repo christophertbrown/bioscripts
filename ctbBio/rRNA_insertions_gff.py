@@ -63,7 +63,7 @@ def parse_orf(insertion, gff):
         Start, End = abs(Start + offset) - 1, abs(End + offset) - 1
         annot = orf[0].split()[1]
         if annot == 'n/a':
-            annot = 'unknown function'
+            annot = 'unknown'
         gff['#seqname'].append(insertion['ID'])
         gff['source'].append('Prodigal and Pfam')
         gff['feature'].append('CDS')
@@ -154,6 +154,9 @@ def iTable2GFF(iTable, fa, contig = False):
     gff = {c:[] for c in columns}
     for insertion in iTable.iterrows():
         insertion = insertion[1]
+
+        if insertion['ID'] not in fa:
+            continue
         # rRNA strand
         strand = insertion['sequence'].split('strand=', 1)[1].split()[0]
         # set rRNA positions for reporting features on contig or extracted sequence
@@ -198,7 +201,10 @@ def name2id(name):
     """
     convert header to id (check gene #)
     """
-    return '%s_%s' % (name.split()[0], name.split('seq=', 1)[1].split()[0])
+    try:
+        return '%s_%s' % (name.split()[0], name.split('seq=', 1)[1].split()[0])
+    except:
+        print('name error:', name)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='# convert rRNA_insertions.py iTable to gff file')
