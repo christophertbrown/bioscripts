@@ -74,7 +74,7 @@ def seq_info(names, id2names, insertions, sequences):
         i_model_pos = name.split('fromHMM::', 1)[1].split('model-pos(ins-len)=')[1].split()[0].split(';') # model overlap
         i_info = []
         for i, ins in enumerate(i_gene_pos):
-            model_pos = i_model_pos[i].split('-')[1].split('(')[0] 
+            model_pos = i_model_pos[i].split('-')[1].split('(')[0]
             length = i_model_pos[i].split('(')[1].split(')')[0]
             iheader = '>%s_%s insertion::seq=%s type=insertion strand=n/a gene-pos=%s-%s model-pos=%s'\
                     % (id, (i + 1), (i + 1), ins[0], ins[1], model_pos)
@@ -163,7 +163,7 @@ def annotate_orfs(fa, seqs, threads, threshold = 1e-6):
     db = '%s/pfam/Pfam-A.hmm' % os.environ['databases']
     base = fa.rsplit('.', 1)[0]
     out = '%s.pfam.hmmscan' % (base)
-    tblout = '%s.pfam.hmmscan-tblout' % (base) 
+    tblout = '%s.pfam.hmmscan-tblout' % (base)
     orf2pfam = {} # orf2pfam[scaffold id][orf id] = pfam
     if os.path.exists(tblout) is False:
         p = subprocess.Popen('hmmscan --cpu %s --tblout %s -o %s %s %s'\

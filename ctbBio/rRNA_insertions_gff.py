@@ -131,7 +131,8 @@ def parse_rRNA(insertion, seq, gff):
         End = Start + len(rRNA) - 1
         if strand == '-':
             Start, End = End - 2, Start - 2
-        Start, End = abs(Start + offset) - 1, abs(End + offset) - 1
+        pos = (abs(Start + offset) - 1, abs(End + offset) - 1)
+        Start, End = min(pos), max(pos)
         source = insertion['source']
         annot = '%s rRNA' % (source.split('from', 1)[0])
         gff['#seqname'].append(insertion['ID'])
@@ -193,27 +194,48 @@ def iTable2GFF(iTable, fa, contig = False):
         gff = parse_catalytic(insertion, gff)
     return pd.DataFrame(gff)[columns].drop_duplicates()
 
+def name2id(name):
+    """
+    convert header to id (check gene #)
+    """
+    return '%s_%s' % (name.split()[0], name.split('seq=', 1)[1].split()[0])
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='# convert rRNA_insertions.py iTable to gff file')
     parser.add_argument(\
             '-i', required = True, \
-            help = 'path to iTable')
+            help = 'path to rRNA iTable')
     parser.add_argument(\
             '-f', required = True, \
-            help = 'path to fasta file')
+            help = 'path to rRNA fasta file')
     parser.add_argument(\
             '--contigs', action = 'store_true', \
-            help = 'input is contigs (not rRNA genes)')
+            help = 'report positions relative to contigs, not rRNA genes')
     args = vars(parser.parse_args())
     # load iTable
     rn = {'insertion.1':'insertion sequence', '#sequence':'sequence'}
     iTable = pd.read_csv(args['i'], sep = '\t').rename(columns = rn)
-    iTable['ID'] = [name.split()[0] for name in iTable['sequence']]
+    if args['contigs'] == True:
+        iTable['ID'] = [name.split()[0] for name in iTable['sequence']]
+    else:
+        iTable['ID'] = [name2id(name) for name in iTable['sequence']]
     iTable['insertion ID'] = [name.split('>')[1].split()[0] for name in iTable['insertion sequence']]
     # load sequences
     fa = args['f']
-    fa = {seq[0].split('>')[1].split()[0]:seq for seq in parse_fasta(fa)}
-    # convert to gff
+    if args['contigs'] == True:
+        fa = {seq[0].split('>')[1].split()[0]:seq for seq in parse_fasta(fa)}
+    else:
+        fa = {name2id(seq[0].split('>')[1]):seq for seq in parse_fasta(fa)}
+    if args['contigs'] is False:
+        gffFile = '%s.gff' % (args['i'].rsplit('.', 1)[0])
+        # print fasta with seq IDs
+        faFile = '%s.gff.fa' % (args['i'].rsplit('.', 1)[0])
+        faFile = open(faFile, 'w')
+        for ID, seq in fa.items():
+            print('>%s' % (ID), file = faFile)
+            print(seq[1], file = faFile)
+        # convert to gff
+    else:
+        gffFile = '%s.contigs.gff' % (args['i'].rsplit('.', 1)[0])
     gff = iTable2GFF(iTable, fa, contig = args['contigs'])
-    gffFile = '%s.gff' % (args['f'].rsplit('.', 1)[0])
     gff.to_csv(open(gffFile, 'w'), sep = '\t', index = False)

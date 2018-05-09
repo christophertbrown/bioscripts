@@ -92,7 +92,7 @@ def hit_groups(hits):
     for hit in sorted(hits, key = itemgetter(0)):
         if current is False:
             current = [hit]
-        elif ssu.check_overlap(current, hit) is True or check_order(current, hit) is False:
+        elif check_overlap(current, hit) is True or check_order(current, hit) is False:
             groups.append(current)
             current = [hit]
         else:

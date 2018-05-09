@@ -34,6 +34,7 @@ ctbBio/orthologer_summary.py
 ctbBio/parallel.py
 ctbBio/rRNA_copies.py
 ctbBio/rRNA_insertions.py
+ctbBio/rRNA_insertions_gff.py
 ctbBio/rax.py
 ctbBio/rc.py
 ctbBio/rec_best_blast.py
