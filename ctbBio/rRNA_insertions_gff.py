@@ -154,7 +154,6 @@ def iTable2GFF(iTable, fa, contig = False):
     gff = {c:[] for c in columns}
     for insertion in iTable.iterrows():
         insertion = insertion[1]
-
         if insertion['ID'] not in fa:
             continue
         # rRNA strand

@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 
-version = '0.21'
+version = '0.24'
 
 packages = ['ctbBio']
 
@@ -19,7 +19,8 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/shuffle_genome.py', 'ctbBio/sixframe.py', 'ctbBio/stats.py', 'ctbBio/stockholm2fa.py',
            'ctbBio/stockholm2oneline.py', 'ctbBio/strip_align.py', 'ctbBio/strip_align_inserts.py',
            'ctbBio/strip_masked.py', 'ctbBio/subset_sam.py', 'ctbBio/transform.py',
-           'ctbBio/unmapped.py', 'ctbBio/rRNA_insertions_gff.py']
+           'ctbBio/unmapped.py', 'ctbBio/rRNA_insertions_gff.py',
+           'ctbBio/ncbi_download.py']
 
 classifiers = ['Programming Language :: Python', 'Programming Language :: Python :: 3',]
 
