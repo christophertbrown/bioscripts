@@ -61,10 +61,23 @@ note: -l 10 specifies that insertions >= 10 bp are removed
 
 * genomes can be supplied as either gene or protein multi-fasta files (one file per genome; each ORF must have a unique identifier)
 
+### download genomes from NCBI
+
+usage: `ncbi_download.py [-h] -g [G [G ...]] [-s S] [-e E] [-i I] [-t T]`
+
+#### example for downloading genomes
+
+cat accessions.list | ncbi_download.py -g -
+
+#### example for downloading proteins
+
+cat accessions.list | ncbi_download.py -g - -s "*protein.faa.gz"
+
 ### requirements
 
 * python3
 * `usearch`
+* `wget`
 
 ### usage
 
