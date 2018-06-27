@@ -194,3 +194,4 @@ if __name__ == '__main__':
         args['g'] = [i.strip() for i in sys.stdin]
     print('# downloading genome info:', args['i'])
     download(args)
+
