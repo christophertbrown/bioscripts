@@ -65,7 +65,6 @@ note: -l 10 specifies that insertions >= 10 bp are removed
 
 * python3
 * `usearch`
-* `wget`
 
 ### usage
 
@@ -78,6 +77,11 @@ In "reference" mode all searches will be conducted against the first genome that
 ## download genomes from NCBI
 
 for usage see: `ncbi_download.py -h`
+
+### requirements
+* python3
+* `wget`
+* `esearch` and `efetch` from [NCBI Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) (optional)
 
 ### download genomes
 `cat accessions.list | ncbi_download.py -g -`
