@@ -63,15 +63,17 @@ note: -l 10 specifies that insertions >= 10 bp are removed
 
 ### download genomes from NCBI
 
-usage: `ncbi_download.py [-h] -g [G [G ...]] [-s S] [-e E] [-i I] [-t T]`
+for usage see: `ncbi_download.py -h`
 
 #### example for downloading genomes
-
-cat accessions.list | ncbi_download.py -g -
+`$ cat accessions.list | ncbi_download.py -g -`
 
 #### example for downloading proteins
+`$ cat accessions.list | ncbi_download.py -g - -s "*protein.faa.gz"`
 
-cat accessions.list | ncbi_download.py -g - -s "*protein.faa.gz"
+#### options
+The --test option can be used to determine whether or not the accession numbers can be found without downloading the genomes.
+The --convert option attempts to convert accession numbers when necessary, but requires that esearch and efetch from ["NCBI Direct"](https://www.ncbi.nlm.nih.gov/books/NBK179288/) tools be installed to the system PATH.
 
 ### requirements
 

@@ -270,7 +270,7 @@ if __name__ == '__main__':
     parser.add_argument(\
             '-node', default = False, required = False, \
             help = 'name of cluster node (optional: for use with --cluster and -t <threads>)')
-    args = vars(parser.parse_args()) 
+    args = vars(parser.parse_args())
     alignment, bootstraps, threads, \
             fasttree, run_rax, run_iq, model, cluster, node = \
             args['a'], args['b'], args['t'], args['no_fast'], \
