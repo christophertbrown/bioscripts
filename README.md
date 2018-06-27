@@ -1,8 +1,8 @@
 # bioscripts
 
-some useful scripts for working with genomics and sequencing data
+* some useful scripts for working with genomics and sequencing data
 
-see also [bioscripts27](https://github.com/christophertbrown/bioscripts27)
+* see also [bioscripts27](https://github.com/christophertbrown/bioscripts27)
 
 # installation
 
@@ -26,7 +26,7 @@ E. P. Nawrocki, "Structural RNA Homology Search and Alignment using Covariance M
 
 * python3 
 * [infernal](http://eddylab.org/infernal/)
-* rRNA_insertions.py requires HMMER3 and Pfam (use databases env. variable: $databases/pfam/Pfam-A.hmm). 
+* rRNA_insertions.py requires HMMER3 and Pfam (use databases env. variable: ~/databases/pfam/Pfam-A.hmm). 
 
 ### databases
 
@@ -43,37 +43,23 @@ E. P. Nawrocki, "Structural RNA Homology Search and Alignment using Covariance M
 
 * find 16S rRNA genes and insertions
 
-`$ 16SfromHMM.py -f <seqs.fa> -m -t 6 > <seqs.16S.fa>`
+`16SfromHMM.py -f <seqs.fa> -m -t 6 > <seqs.16S.fa>`
 
 * remove insertions (useful for phylogenetic analyses)
 
-`$ strip_masked.py -f <seqs.16S.fa> -l 10 > <seqs.16S.s10.fa>`
+`strip_masked.py -f <seqs.16S.fa> -l 10 > <seqs.16S.s10.fa>`
 
 note: -l 10 specifies that insertions >= 10 bp are removed
 
 ### analyze insertions
 
-`$ rRNA_insertions.py <seqs.16S.fa> <False or tax_table.tsv>`
+`rRNA_insertions.py <seqs.16S.fa> <False or tax_table.tsv>`
 
 ## ortholog identification between pairs of genomes using orthologer.py 
 
 * orthologer.py conducts reciprocal usearch similarity searches between pairs of provided genomes to identify reciprocal best hits
 
 * genomes can be supplied as either gene or protein multi-fasta files (one file per genome; each ORF must have a unique identifier)
-
-### download genomes from NCBI
-
-for usage see: `ncbi_download.py -h`
-
-#### example for downloading genomes
-`$ cat accessions.list | ncbi_download.py -g -`
-
-#### example for downloading proteins
-`$ cat accessions.list | ncbi_download.py -g - -s "*protein.faa.gz"`
-
-#### options
-The --test option can be used to determine whether or not the accession numbers can be found without downloading the genomes.
-The --convert option attempts to convert accession numbers when necessary, but requires that esearch and efetch from ["NCBI Direct"](https://www.ncbi.nlm.nih.gov/books/NBK179288/) tools be installed to the system PATH.
 
 ### requirements
 
@@ -83,8 +69,22 @@ The --convert option attempts to convert accession numbers when necessary, but r
 
 ### usage
 
-`$ orthologer.py <mode> <genome1> <genome2> <genome...> > orthologer.out`
+`orthologer.py <mode> <genome1> <genome2> <genome...> > orthologer.out`
 
 Mode can be either "reference" or "global." 
 
 In "reference" mode all searches will be conducted against the first genome that is listed. In "global" mode all possible pairwise searches are conducted between the listed genomes (# searches = #genomes^#genomes). 
+
+## download genomes from NCBI
+
+for usage see: `ncbi_download.py -h`
+
+### download genomes
+`cat accessions.list | ncbi_download.py -g -`
+
+### download proteins
+`cat accessions.list | ncbi_download.py -g - -s "*protein.faa.gz"`
+
+### options
+The --test option can be used to determine whether or not the accession numbers can be found without downloading the genomes.
+The --convert option attempts to convert accession numbers when necessary, but requires that `esearch` and `efetch` from [NCBI Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) be installed to the system PATH.
