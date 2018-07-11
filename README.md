@@ -80,6 +80,7 @@ for usage see: `ncbi_download.py -h`
 
 ### requirements
 * python3
+* tqdm
 * `wget`
 * `esearch` and `efetch` from [NCBI Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) (optional)
 
