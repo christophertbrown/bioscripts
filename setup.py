@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 
-version = '0.25'
+version = '0.26'
 
 packages = ['ctbBio']
 
@@ -22,9 +22,9 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/unmapped.py', 'ctbBio/rRNA_insertions_gff.py',
            'ctbBio/ncbi_download.py']
 
-classifiers = ['Programming Language :: Python', 'Programming Language :: Python :: 3',]
+classifiers = ['Programming Language :: Python', 'Programming Language :: Python :: 3']
 
-requirements = ['networkx', 'python-Levenshtein', 'numpy', 'pandas', 'biopython'],
+requirements = ['networkx', 'python-Levenshtein', 'numpy', 'pandas', 'biopython', 'tqdm']
 
 setup(name='ctbBio',
       author='Chris Brown',
