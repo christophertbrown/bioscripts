@@ -35,16 +35,16 @@ def best(blast, max, evalue = False, bit = False):
             hits.append(line)
         elif line[10] <= evalue and line[11] >= bit:
             hits.append(line)
-        elif evalue == False and line[11] >= bit:    hits.append(line)
+        elif evalue == False and line[11] >= bit:
+            hits.append(line)
         prev = id
     for hit in top_hits(hits, max):
         yield hit
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
-        print('please specify blast tsv file, the number of hits, an evalue threshold,')
-        print('and a bit score threshold')
-        print('use \'-\' if from stdin or in place of a threshold')
+        print('usage: numblast.py <blast tsv file> <number of hits> <evalue threshold> <bit score threshold>')
+        print('# use - if from stdin or in place of a threshold')
         exit()
     blast, max, thresholds = sys.argv[1], int(sys.argv[2]), sys.argv[3:6]
     if blast == '-':
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             t = False
         else:
             t = float(t)
-        thresholds[i] = t 
-    e, bit = thresholds 
+        thresholds[i] = t
+    e, bit = thresholds
     for hit in best(blast, max, e, bit):
         print('\t'.join(hit))
