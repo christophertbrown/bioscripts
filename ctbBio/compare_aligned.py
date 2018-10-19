@@ -17,6 +17,26 @@ def calc_pident(a, b):
     m = 0 # matches
     mm = 0 # mismatches
     for A, B in zip(list(a), list(b)):
+        if A == '.' or B == '.':
+            continue
+        if A == '-' and B == '-':
+            continue
+        if A == B:
+            m += 1
+        else:
+            mm += 1
+    try:
+        return float(float(m)/float((m + mm))) * 100
+    except:
+        return 0
+
+def calc_pident_ignore_gaps(a, b):
+    """
+    calculate percent identity
+    """
+    m = 0 # matches
+    mm = 0 # mismatches
+    for A, B in zip(list(a), list(b)):
         if A == '-' or A == '.' or B == '-' or B == '.':
             continue
         if A == B:
@@ -44,19 +64,22 @@ def compare_seqs(seqs):
     """
     compare pairs of sequences
     """
-    A, B = seqs
+    A, B, ignore_gaps = seqs
     a, b = A[1], B[1] # actual sequences
     if len(a) != len(b):
         print('# reads are not the same length', file=sys.stderr)
         exit()
-    pident = calc_pident(a, b)
+    if ignore_gaps is True:
+        pident = calc_pident_ignore_gaps(a, b)
+    else:
+        pident = calc_pident(a, b)
     return A[0], B[0], pident
 
 def compare_seqs_leven(seqs):
     """
     calculate Levenshtein ratio of sequences
     """
-    A, B = seqs
+    A, B, ignore_gaps = seqs
     a, b = remove_gaps(A[1], B[1]) # actual sequences
     if len(a) != len(b):
         print('# reads are not the same length', file=sys.stderr)
@@ -64,14 +87,14 @@ def compare_seqs_leven(seqs):
     pident = lr(a, b) * 100
     return A[0], B[0], pident
 
-def pairwise_compare(afa, leven, threads, print_list):
+def pairwise_compare(afa, leven, threads, print_list, ignore_gaps):
     """
     make pairwise sequence comparisons between aligned sequences
     """
     # load sequences into dictionary
     seqs = {seq[0]: seq for seq in nr_fasta([afa], append_index = True)}
     # define all pairs
-    pairs = itertools.combinations(list(seqs.values()), 2)
+    pairs = ((i[0], i[1], ignore_gaps) for i in itertools.combinations(list(seqs.values()), 2))
     pool = multithread(threads)
     # calc percent identity between all pairs - parallelize
     if leven is True:
@@ -229,15 +252,18 @@ if __name__ == '__main__':
             '--clades', action = 'store_true', \
             help = 'compare clades based on header, e.g. >[0]Bacteria;[1]OD1;[2]unknown or >Bacteria;OD1;unknown')
     parser.add_argument(\
+            '--ignore-gaps', action = 'store_true', \
+            help = 'ignore gaps in alignment')
+    parser.add_argument(\
             '--leven', action = 'store_true', \
             help = 'calculate Levenshtein ratio')
     parser.add_argument(\
             '-t', default = 6, type = int,\
             help = 'number of threads (default: 6)')
     args = vars(parser.parse_args())
-    afa, matrix, print_list, print_matrix, clades, leven, threads = \
+    afa, matrix, print_list, print_matrix, clades, ignore_gaps, leven, threads = \
             args['a'], args['m'], args['list'], args['no_matrix'], \
-            args['clades'], args['leven'], args['t']
+            args['clades'], args['ignore_gaps'], args['leven'], args['t']
     if (afa is False and matrix is False) or (afa is not False and matrix is not False):
         print('# use -a or -m; -h for help', file=sys.stderr)
         exit()
@@ -246,7 +272,8 @@ if __name__ == '__main__':
             afa = sys.stdin
         else:
             afa = open(afa)
-        pairwise = pairwise_compare(afa, leven, threads, print_list)
+        pairwise = pairwise_compare(afa, leven, threads, print_list,
+                ignore_gaps)
         if print_matrix is True:
             for i in print_pairwise(pairwise):
                 print('\t'.join([str(j) for j in i]))
