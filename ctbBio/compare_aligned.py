@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-import sys
 import os
-from multiprocessing import Pool as multithread
+import sys
 import argparse
 import itertools
 import numpy as np
+from tqdm import tqdm as tqdm
+from multiprocessing import Pool as multithread
 #from Levenshtein import ratio as lr
 
 from ctbBio.nr_fasta import de_rep as nr_fasta
@@ -93,6 +94,7 @@ def pairwise_compare(afa, leven, threads, print_list, ignore_gaps):
     """
     # load sequences into dictionary
     seqs = {seq[0]: seq for seq in nr_fasta([afa], append_index = True)}
+    num_seqs = len(seqs)
     # define all pairs
     pairs = ((i[0], i[1], ignore_gaps) for i in itertools.combinations(list(seqs.values()), 2))
     pool = multithread(threads)
@@ -100,8 +102,10 @@ def pairwise_compare(afa, leven, threads, print_list, ignore_gaps):
     if leven is True:
         pident = pool.map(compare_seqs_leven, pairs)
     else:
-        pident = pool.map(compare_seqs, pairs)
+        compare = pool.imap_unordered(compare_seqs, pairs)
+        pident = [i for i in tqdm(compare, total = num_seqs*num_seqs)]
     pool.close()
+    pool.terminate()
     pool.join()
     return to_dictionary(pident, print_list)
 
