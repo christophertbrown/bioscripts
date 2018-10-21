@@ -103,7 +103,7 @@ def pairwise_compare(afa, leven, threads, print_list, ignore_gaps):
         pident = pool.map(compare_seqs_leven, pairs)
     else:
         compare = pool.imap_unordered(compare_seqs, pairs)
-        pident = [i for i in tqdm(compare, total = num_seqs*num_seqs)]
+        pident = [i for i in tqdm(compare, total = (num_seqs*num_seqs)/2)]
     pool.close()
     pool.terminate()
     pool.join()
