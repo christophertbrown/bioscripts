@@ -3,6 +3,7 @@ setup.py
 ctbBio/16SfromHMM.py
 ctbBio/23SfromHMM.py
 ctbBio/__init__.py
+ctbBio/besthits.py
 ctbBio/calculate_coverage.py
 ctbBio/cluster_ani.py
 ctbBio/compare_aligned.py

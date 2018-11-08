@@ -23,7 +23,7 @@ def print_single(line, rev):
     fq = ['@%s' % line[0], seq, '+%s' % line[0], qual]
     print('\n'.join(fq), file = sys.stderr)
 
-def sam2fastq(sam, singles = False):
+def sam2fastq(sam, singles = False, force = False):
     """
     convert sam to fastq
     """
@@ -51,20 +51,26 @@ def sam2fastq(sam, singles = False):
             qual = line[10]
         # check if read is forward or reverse, return when both have been found
         if left is True:
-            if L is not None:
+            if L is not None and force is False:
                 print('sam file is not sorted', file = sys.stderr)
                 print('\te.g.: %s' % (line[0]), file = sys.stderr)
                 exit()
+            if L is not None:
+                L = None
+                continue
             L = ['@%s' % line[0], seq, '+%s' % line[0], qual]
             if R is not None:
                 yield L
                 yield R
                 L, R = None, None
         if right is True:
-            if R is not None:
+            if R is not None and force is False:
                 print('sam file is not sorted', file = sys.stderr)
                 print('\te.g.: %s' % (line[0]), file = sys.stderr)
                 exit()
+            if R is not None:
+                R = None
+                continue
             R = ['@%s' % line[0], seq, '+%s' % line[0], qual]
             if L is not None:
                 yield L
@@ -72,10 +78,11 @@ def sam2fastq(sam, singles = False):
                 L, R = None, None
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print('usage: sam2fastq.py <mapping.sam> <singles to stderr?: True or False>')
+    if len(sys.argv) != 4:
+        print('usage: sam2fastq.py <mapping.sam> <singles to stderr?: True or False> <force exclude unpaired paired reads: True or False)>',
+                file = sys.stderr)
         exit()
-    sam, singles = sys.argv[1], sys.argv[2]
+    sam, singles, force = sys.argv[1], sys.argv[2], sys.argv[3]
     if sam == '-':
         sam = sys.stdin
     else:
@@ -84,5 +91,9 @@ if __name__ == '__main__':
         singles = True
     else:
         singles = False
-    for seq in sam2fastq(sam, singles):
+    if force == 'True':
+        force = True
+    else:
+        force = False
+    for seq in sam2fastq(sam, singles, force):
         print('\n'.join(seq))
