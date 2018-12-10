@@ -2,9 +2,8 @@
 
 """
 script for clustering genomes based on average nucleotide
-identity 
+identity
 """
-
 import os
 import sys
 import argparse
@@ -98,7 +97,7 @@ def ani(fastas, mash_file, sim_threshold, threads):
 def genome_info(genome, info):
     """
     return genome info for choosing representative
-    
+
     if ggKbase table provided - choose rep based on SCGs and genome length
         - priority for most SCGs - extra SCGs, then largest genome
 
@@ -114,7 +113,7 @@ def genome_info(genome, info):
 
 def print_clusters(fastas, info, ANI):
     """
-    choose represenative genome and 
+    choose represenative genome and
     print cluster information
 
     *if ggKbase table is provided, use SCG info to choose best genome
@@ -144,7 +143,7 @@ def print_clusters(fastas, info, ANI):
                 stats = ['*%s' % (cluster_num)] + stats
             else:
                 stats = [cluster_num] + stats
-            yield stats 
+            yield stats
     # print singletons
     try:
         start = cluster_num + 1
@@ -161,7 +160,7 @@ def print_clusters(fastas, info, ANI):
             stats = ['*%s' % (cluster_num), 1, genome, genome, \
                         'n/a', 'n/a', \
                         info[genome]['genome size (bp)'], info[genome]['# contigs'], [genome]]
-        yield stats 
+        yield stats
 
 def to_int(i):
     """
@@ -251,7 +250,7 @@ def genome_lengths(fastas, info):
             length += len(seq[1])
             fragments += 1
         info[name] = {'genome size (bp)':length, '# contigs':fragments}
-    return info 
+    return info
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = \

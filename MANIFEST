@@ -25,6 +25,7 @@ ctbBio/lookup-word.py
 ctbBio/lookup.py
 ctbBio/mapped.py
 ctbBio/n50.py
+ctbBio/name2faa.py
 ctbBio/name2fasta.py
 ctbBio/ncbi_download.py
 ctbBio/neto.py

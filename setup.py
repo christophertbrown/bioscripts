@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+# python setup.py sdist upload -r pypi
+
 from distutils.core import setup
 
-version = '0.30'
+version = '0.32'
 
 packages = ['ctbBio']
 
@@ -12,7 +14,8 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/fasta_region.py', 'ctbBio/fasta_stats.py', 'ctbBio/fastq2fasta.py', 'ctbBio/fastq_merge.py',
            'ctbBio/fastq_split.py', 'ctbBio/filter_fastq_sam.py', 'ctbBio/fix_fasta.py', 'ctbBio/genome_abundance.py',
            'ctbBio/genome_coverage.py', 'ctbBio/genome_variation.py', 'ctbBio/lookup-word.py', 'ctbBio/lookup.py',
-           'ctbBio/mapped.py', 'ctbBio/n50.py', 'ctbBio/name2fasta.py', 'ctbBio/neto.py', 'ctbBio/rec_best_blast.py',
+           'ctbBio/mapped.py', 'ctbBio/n50.py', 'ctbBio/name2fasta.py',
+           'ctbBio/name2faa.py', 'ctbBio/neto.py', 'ctbBio/rec_best_blast.py',
            'ctbBio/nr_fasta.py', 'ctbBio/numblast-pident.py', 'ctbBio/orthologer.py', 'ctbBio/orthologer_summary.py',
            'ctbBio/parallel.py', 'ctbBio/rRNA_copies.py', 'ctbBio/rRNA_insertions.py', 'ctbBio/rax.py',
            'ctbBio/rc.py', 'ctbBio/rp16.py', 'ctbBio/rp16_retreive.sh', 'ctbBio/sam2fastq.py', 'ctbBio/search.py',
