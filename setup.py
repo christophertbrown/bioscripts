@@ -4,7 +4,7 @@
 
 from distutils.core import setup
 
-version = '0.32'
+version = '0.33'
 
 packages = ['ctbBio']
 
