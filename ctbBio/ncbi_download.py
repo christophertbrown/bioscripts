@@ -47,6 +47,8 @@ def md5check(f, ftp, md5, exclude):
     md5 = md5[md5['file'].str.endswith(f.rsplit('*', 1)[-1])]
     ## remove preceding characters from file paths
     md5['file'] = [i.replace('./', '') for i in md5['file']]
+    ## exclude md5s for sub directories
+    md5 = md5[~md5['file'].str.contains('/')]
     ## exclude files
     md5 = md5[~md5['file'].str.contains(exclude.replace('*', ''))]
     # get local md5s
