@@ -19,12 +19,16 @@ def calcMD5(path):
     """
     calc MD5 based on path
     """
-    command = ['md5sum', path]
-    p = Popen(command, stdout = PIPE)
-    for line in p.communicate()[0].splitlines():
-        yield line.decode('ascii').strip().split()[0]
-    p.wait()
-    yield False
+    # check that file exists
+    if os.path.exists(path) is False:
+        yield False
+    else:
+        command = ['md5sum', path]
+        p = Popen(command, stdout = PIPE)
+        for line in p.communicate()[0].splitlines():
+            yield line.decode('ascii').strip().split()[0]
+        p.wait()
+        yield False
 
 def md5check(f, ftp, md5, exclude):
     """
@@ -56,8 +60,11 @@ def md5check(f, ftp, md5, exclude):
     # return false if md5s do not match
     for i, File in md5.iterrows():
         if File['ftp md5'] != File['local md5']:
-            os.remove(File['file'])
-            return False
+            try:
+                os.remove(File['file'])
+                return False
+            except:
+                return False
     print('## already downloaded:', f)
     return True
 
