@@ -8,24 +8,68 @@ script for downloading genomes from NCBI
 import os
 import sys
 import argparse
+import pandas as pd
 from tqdm import tqdm
 from subprocess import Popen
 from glob import glob as glob
 from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
-def wget(ftp, f = False, exclude = False, name = False, tries = 10):
+def calcMD5(path):
     """
-    use wget to download file
+    calc MD5 based on path
+    """
+    command = ['md5sum', path]
+    p = Popen(command, stdout = PIPE)
+    for line in p.communicate()[0].splitlines():
+        yield line.decode('ascii').strip().split()[0]
+    p.wait()
+    yield False
+
+def md5check(f, ftp, md5, exclude):
+    """
+    * comfirm that downloaded files match md5 checksum on server
+    * if md5 is False, only check path for the download
+    """
+    files = glob(f)
+    # if no md5 file is specified: download files if path does not exist
+    if md5 is False:
+        if len(files) == 0:
+            return False
+        return True
+    # get md5s from server
+    ## path to md5 file on ftp server
+    md5 = '%s/%s' % (ftp.rsplit('/', 1)[0], md5)
+    ## read md5 table from server
+    md5 = pd.read_csv(md5, delim_whitespace = True, names = ['ftp md5', 'file'])
+    ## filter for md5 files that match file type
+    md5 = md5[md5['file'].str.endswith(f.rsplit('*', 1)[-1])]
+    ## remove preceding characters from file paths
+    md5['file'] = [i.replace('./', '') for i in md5['file']]
+    ## exclude files
+    md5 = md5[~md5['file'].str.contains(exclude.replace('*', ''))]
+    # get local md5s
+    md5['local md5'] = [[j for j in calcMD5(i)][0] for i in md5['file']]
+    # return false if md5s do not match
+    for i, File in md5.iterrows():
+        if File['ftp md5'] != File['local md5']:
+            os.remove(File['file'])
+            return False
+    return True
+
+def wget(ftp, f = False, exclude = False, name = False, md5 = False, tries = 10):
+    """
+    download files with wget
     """
     # file name
     if f is False:
         f = ftp.rsplit('/', 1)[-1]
     # downloaded file if it does not already exist
+    # check md5s on server (optional)
     t = 0
     if name is not False:
         print('# downloading:', name, f)
-    while len(glob(f)) == 0:
+    while md5check(f, ftp, md5, exclude) is not True:
         t += 1
         if exclude is False:
             command = 'wget -q --random-wait %s' % (ftp)
@@ -136,12 +180,12 @@ def getFTPs(accessions, ftp, search, exclude, convert = False, threads = 1, atte
                 threads = 1, attempt = attempt):
             yield hit
 
-def wgetGenome(pars):
+def wgetGenome(pars, md5 = 'md5checksums.txt'):
     """
     """
     ftp, f, exclude, matches = pars
     name = ';'.join(list(matches))
-    return wget(ftp, f, exclude, name)
+    return wget(ftp, f, exclude, name, md5 = md5)
 
 def download(args):
     """
