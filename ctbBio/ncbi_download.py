@@ -36,6 +36,7 @@ def md5check(f, ftp, md5, exclude):
     if md5 is False:
         if len(files) == 0:
             return False
+        print('## already downloaded:', f)
         return True
     # get md5s from server
     ## path to md5 file on ftp server
@@ -55,6 +56,7 @@ def md5check(f, ftp, md5, exclude):
         if File['ftp md5'] != File['local md5']:
             os.remove(File['file'])
             return False
+    print('## already downloaded:', f)
     return True
 
 def wget(ftp, f = False, exclude = False, name = False, md5 = False, tries = 10):
@@ -67,10 +69,10 @@ def wget(ftp, f = False, exclude = False, name = False, md5 = False, tries = 10)
     # downloaded file if it does not already exist
     # check md5s on server (optional)
     t = 0
-    if name is not False:
-        print('# downloading:', name, f)
     while md5check(f, ftp, md5, exclude) is not True:
         t += 1
+        if name is not False:
+            print('# downloading:', name, f)
         if exclude is False:
             command = 'wget -q --random-wait %s' % (ftp)
         else:
