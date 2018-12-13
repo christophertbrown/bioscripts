@@ -65,7 +65,11 @@ def numDomtblout(domtblout, numHits, evalueT, bitT):
     for line in domtblout:
         if line.startswith('#'):
             continue
-        line = line.strip().split('\t')
+        # parse line and get description
+        line = line.strip().split()
+        desc = ' '.join(line[18:])
+        line = line[0:18]
+        line.append(desc)
         # create ID based on query name and domain number
         ID = line[0] + line[9]
         # domain c-Evalue and domain score thresholds
