@@ -38,7 +38,7 @@ def md5check(f, ftp, md5, exclude):
     files = glob(f)
     # if no md5 file is specified: download files if path does not exist
     if md5 is False:
-        if len(files) == 0:
+        iflen(files) == 0:
             return False
         print('## already downloaded:', f)
         return True
@@ -46,7 +46,10 @@ def md5check(f, ftp, md5, exclude):
     ## path to md5 file on ftp server
     md5 = '%s/%s' % (ftp.rsplit('/', 1)[0], md5)
     ## read md5 table from server
-    md5 = pd.read_csv(md5, delim_whitespace = True, names = ['ftp md5', 'file'])
+    try:
+        md5 = pd.read_csv(md5, delim_whitespace = True, names = ['ftp md5', 'file'])
+    except:
+        return False
     ## filter for md5 files that match file type
     md5 = md5[md5['file'].str.endswith(f.rsplit('*', 1)[-1])]
     ## remove preceding characters from file paths
