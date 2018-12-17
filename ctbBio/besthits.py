@@ -4,8 +4,8 @@
 filter specified number of hits from a blast or HMM search
 that pass evalue and bit score thresholds
 
-note: file must be sorted by query ID, but does not have to be
-sorted by significance
+note: file must be sorted by query ID (and domain # for domtblout),
+but does not have to be sorted by significance
 """
 
 import os
@@ -14,39 +14,42 @@ import argparse
 import pandas as pd
 from operator import itemgetter
 
-def top_hits(hits, num, column):
-    hits = sorted(hits, key = itemgetter(-1, column), reverse = True)
+def top_hits(hits, num, column, reverse):
+    """
+    get top hits after sorting by column number
+    """
+    hits = sorted(hits, key = itemgetter(-1, column), reverse = reverse)
     for hit in hits[0:num]:
-        yield [str(i) for i in hit[0:-1]]
+        yield hit
 
-def numBlast(blast, numHits, evalue = False, bit = False):
+def numBlast(blast, numHits, evalueT = False, bitT = False):
+    header = ['#query', 'target', 'pident', 'alen', 'mismatch', 'gapopen',
+              'qstart', 'qend', 'tstart', 'tend', 'evalue', 'bitscore']
+    yield header
     prev, hits = None, []
     for line in blast:
         line = line.strip().split('\t')
-        if line[10] == '*':
-            line[10] = line[11] = float(line[2])
-        else:
-            line[10], line[11] = float(line[10]), float(line[11])
-        id = line[0]
-        line.append(float(line[10]) / -1)
+        ID = line[0]
+        evalue, bit = float(line[10]), float(line[11])
+        line[10], line[11] = evalue, bit
         if id != prev:
             if len(hits) > 0:
-                for hit in top_hits(hits, numHits, 11):
+                for hit in top_hits(hits, numHits, 10, False):
                     yield hit
             hits = []
-        if evalue == False and bit == False:
+        if evalueT == False and bitT == False:
             hits.append(line)
-        elif line[10] <= evalue and bit == False:
+        elif evalue <= evalueT and bitT == False:
             hits.append(line)
-        elif line[10] <= evalue and line[11] >= bit:
+        elif evalue <= evalueT and bit >= bitT:
             hits.append(line)
-        elif evalue == False and line[11] >= bit:
+        elif evalueT == False and bit >= bitT:
             hits.append(line)
-        prev = id
-    for hit in top_hits(hits, numHits, 11):
+        prev = ID
+    for hit in top_hits(hits, numHits, 10, False):
         yield hit
 
-def numDomtblout(domtblout, numHits, evalue, bit):
+def numDomtblout(domtblout, numHits, evalueT, bitT):
     """
     parse hmm domain table output
     """
@@ -58,28 +61,80 @@ def numDomtblout(domtblout, numHits, evalue, bit):
               'hmm from', 'hmm to', 'seq from', 'seq to', 'env from', 'env to',
               'acc', 'target description']
     yield header
-    hmm = {h:[] for h in header}
+    prev, hits = None, []
     for line in domtblout:
         if line.startswith('#'):
             continue
+        # parse line and get description
         line = line.strip().split()
-        if evalue is not False and float(line[11]) > evalue:
-            continue
-        if bit is not False and float(line[13]) < bit:
-            continue
-        line, desc = line[0:22], ' '.join(line[22:])
+        desc = ' '.join(line[18:])
+        line = line[0:18]
         line.append(desc)
-        for i, h in zip(line, header):
-            hmm[h].append(i)
-    hmm = pd.DataFrame(hmm)
-    hmm['domain score'] = [float(i) for i in hmm['domain score']]
-    for query, df in hmm.groupby(by = ['#target name', 'domain #']):
-        df = df.sort_values(by = ['domain score'], ascending = False)
-        for hit in df[header].values[0:numHits]:
-            yield [str(i) for i in hit]
+        # create ID based on query name and domain number
+        ID = line[0] + line[9]
+        # domain c-Evalue and domain score thresholds
+        evalue, bitscore = float(line[11]), float(line[13])
+        line[11], line[13] = evalue, bitscore
+        if ID != prev:
+            if len(hits) > 0:
+                for hit in top_hits(hits, numHits, 11, False):
+                    yield hit
+            hits = []
+        if evalueT == False and bitT == False:
+            hits.append(line)
+        elif evalue <= evalueT and bitT == False:
+            hits.append(line)
+        elif evalue <= evalueT and bit >= bitT:
+            hits.append(line)
+        elif evalueT == False and bit >= bitT:
+            hits.append(line)
+        prev = ID
+    for hit in top_hits(hits, numHits, 11, False):
+        yield hit
+
+def numTblout(tblout, numHits, evalueT, bitT):
+    """
+    parse hmm table output
+    """
+    header = ['#target name', 'target accession',
+              'query name', 'query accession',
+              'full E-value', 'full score',  'full bias',
+              'best E-value', 'best score',  'best bias',
+              'exp', 'reg', 'clu',  'ov', 'env', 'dom', 'rep', 'inc',
+              'description of target']
+    yield header
+    prev, hits = None, []
+    for line in tblout:
+        if line.startswith('#'):
+            continue
+        # parse line and get description
+        line = line.strip().split()
+        desc = ' '.join(line[18:])
+        line = line[0:18]
+        line.append(desc)
+        # ID and scores
+        ID = line[0]
+        evalue, bitscore = float(line[4]), float(line[5])
+        line[4], line[5] = evalue, bitscore
+        if ID != prev:
+            if len(hits) > 0:
+                for hit in top_hits(hits, numHits, 4, False):
+                    yield hit
+            hits = []
+        if evalueT == False and bitT == False:
+            hits.append(line)
+        elif evalue <= evalueT and bitT == False:
+            hits.append(line)
+        elif evalue <= evalueT and bit >= bitT:
+            hits.append(line)
+        elif evalueT == False and bit >= bitT:
+            hits.append(line)
+        prev = ID
+    for hit in top_hits(hits, numHits, 4, False):
+        yield hit
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description = '# filter blast or HMM tabulat output')
+    parser = argparse.ArgumentParser(description = '# filter blast or HMM tab output')
     parser.add_argument(\
             '-i', default = '-', \
             help = 'path to search results (sorted by query; default = stdin)')
@@ -94,10 +149,7 @@ if __name__ == '__main__':
             help = 'bit score threshold (default = None)')
     parser.add_argument(\
             '-f', default = 'b6', type = str,\
-            help = 'format (default = b6, options: b6, domtblout)')
-    #    parser.add_argument(\
-    #            '-t', default = 6, type = int,\
-    #            help = 'number of threads (default = 6)')
+            help = 'format (default = b6, options: b6, domtblout, tblout)')
     args = vars(parser.parse_args())
     # check if file is from stdin
     if args['i'] == '-':
@@ -106,9 +158,12 @@ if __name__ == '__main__':
         args['i'] = open(args['i'])
     if args['f'] == 'b6':
         for hit in numBlast(args['i'], args['n'], args['e'], args['b']):
-            print('\t'.join(hit))
+            print('\t'.join([str(i) for i in hit]))
     elif args['f'] == 'domtblout':
         for hit in numDomtblout(args['i'], args['n'], args['e'], args['b']):
-            print('\t'.join(hit))
+            print('\t'.join([str(i) for i in hit]))
+    elif args['f'] == 'tblout':
+        for hit in numTblout(args['i'], args['n'], args['e'], args['b']):
+            print('\t'.join([str(i) for i in hit]))
     else:
         print('unsupported format:', args['f'])
