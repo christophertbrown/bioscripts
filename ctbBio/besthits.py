@@ -66,7 +66,7 @@ def numBlast(blast, numHits, evalueT = False, bitT = False, sort = False):
         ID = line[0]
         evalue, bit = float(line[10]), float(line[11])
         line[10], line[11] = evalue, bit
-        if id != prev:
+        if ID != prev:
             if len(hits) > 0:
                 for hit in top_hits(hits, numHits, 10, False):
                     yield hit
