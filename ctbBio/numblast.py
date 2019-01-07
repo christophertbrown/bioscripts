@@ -23,7 +23,7 @@ def best(blast, max, evalue = False, bit = False):
         else:
             line[10], line[11] = float(line[10]), float(line[11])
         id = line[0]
-        line.append(float(line[10]) / -1)
+#        line.append(float(line[10]) / -1)
         if id != prev:
             if len(hits) > 0:
                 for hit in top_hits(hits, max):

@@ -18,7 +18,7 @@ def top_hits(hits, num, column, reverse):
     """
     get top hits after sorting by column number
     """
-    hits = sorted(hits, key = itemgetter(-1, column), reverse = reverse)
+    hits.sort(key = itemgetter(column), reverse = reverse)
     for hit in hits[0:num]:
         yield hit
 
@@ -35,7 +35,8 @@ def numBlast_sort(blast, numHits, evalueT, bitT):
             continue
         line = line.strip().split('\t')
         # Evalue and Bitscore thresholds
-        evalue, bit = float(line[10]), float(line[11])
+        line[10], line[11] = float(line[10]), float(line[11])
+        evalue, bit = line[10], line[11]
         if evalueT is not False and evalue > evalueT:
             continue
         if bitT is not False and bit < bitT:
@@ -43,9 +44,8 @@ def numBlast_sort(blast, numHits, evalueT, bitT):
         for i, h in zip(line, header):
             hmm[h].append(i)
     hmm = pd.DataFrame(hmm)
-    hmm['evalue'] = [float(i) for i in hmm['evalue']]
     for query, df in hmm.groupby(by = ['#query']):
-        df = df.sort_values(by = ['evalue'], ascending = True)
+        df = df.sort_values(by = ['bitscore'], ascending = False)
         for hit in df[header].values[0:numHits]:
             yield hit
 
@@ -64,11 +64,12 @@ def numBlast(blast, numHits, evalueT = False, bitT = False, sort = False):
     for line in blast:
         line = line.strip().split('\t')
         ID = line[0]
-        evalue, bit = float(line[10]), float(line[11])
-        line[10], line[11] = evalue, bit
+        line[10], line[11] = float(line[10]), float(line[11])
+        evalue, bit = line[10], line[11]
         if ID != prev:
             if len(hits) > 0:
-                for hit in top_hits(hits, numHits, 10, False):
+                # column is 1 + line index
+                for hit in top_hits(hits, numHits, 11, True):
                     yield hit
             hits = []
         if evalueT == False and bitT == False:
@@ -80,7 +81,7 @@ def numBlast(blast, numHits, evalueT = False, bitT = False, sort = False):
         elif evalueT == False and bit >= bitT:
             hits.append(line)
         prev = ID
-    for hit in top_hits(hits, numHits, 10, False):
+    for hit in top_hits(hits, numHits, 11, True):
         yield hit
 
 def numDomtblout_sort(domtblout, numHits, evalueT, bitT):
@@ -101,7 +102,8 @@ def numDomtblout_sort(domtblout, numHits, evalueT, bitT):
             continue
         line = line.strip().split()
         # domain c-Evalue and domain score thresholds
-        evalue, bit = float(line[11]), float(line[13])
+        line[11], line[13] = float(line[11]), float(line[13])
+        evalue, bit = line[11], line[13]
         if evalueT is not False and evalue > evalueT:
             continue
         if bitT is not False and bit < bitT:
@@ -111,9 +113,8 @@ def numDomtblout_sort(domtblout, numHits, evalueT, bitT):
         for i, h in zip(line, header):
             hmm[h].append(i)
     hmm = pd.DataFrame(hmm)
-    hmm['domain c-Evalue'] = [float(i) for i in hmm['domain c-Evalue']]
     for query, df in hmm.groupby(by = ['#target name', 'domain #']):
-        df = df.sort_values(by = ['domain c-Evalue'], ascending = True)
+        df = df.sort_values(by = ['domain score'], ascending = False)
         for hit in df[header].values[0:numHits]:
             yield hit
 
@@ -146,11 +147,12 @@ def numDomtblout(domtblout, numHits, evalueT, bitT, sort):
         # create ID based on query name and domain number
         ID = line[0] + line[9]
         # domain c-Evalue and domain score thresholds
-        evalue, bitscore = float(line[11]), float(line[13])
+        line[11], line[13] = float(line[11]), float(line[13])
+        evalue, bitscore = line[11], line[13]
         line[11], line[13] = evalue, bitscore
         if ID != prev:
             if len(hits) > 0:
-                for hit in top_hits(hits, numHits, 11, False):
+                for hit in top_hits(hits, numHits, 13, True):
                     yield hit
             hits = []
         if evalueT == False and bitT == False:
@@ -162,7 +164,7 @@ def numDomtblout(domtblout, numHits, evalueT, bitT, sort):
         elif evalueT == False and bit >= bitT:
             hits.append(line)
         prev = ID
-    for hit in top_hits(hits, numHits, 11, False):
+    for hit in top_hits(hits, numHits, 13, True):
         yield hit
 
 def numTblout_sort(tblout, numHits, evalueT, bitT):
@@ -182,7 +184,8 @@ def numTblout_sort(tblout, numHits, evalueT, bitT):
             continue
         line = line.strip().split()
         # domain full Evalue and full score thresholds
-        evalue, bit = float(line[4]), float(line[5])
+        line[4], line[5] = float(line[4]), float(line[5])
+        evalue, bit = line[4], line[5]
         if evalueT is not False and evalue > evalueT:
             continue
         if bitT is not False and bit < bitT:
@@ -192,9 +195,8 @@ def numTblout_sort(tblout, numHits, evalueT, bitT):
         for i, h in zip(line, header):
             hmm[h].append(i)
     hmm = pd.DataFrame(hmm)
-    hmm['full E-value'] = [float(i) for i in hmm['full E-value']]
     for query, df in hmm.groupby(by = ['#target name']):
-        df = df.sort_values(by = ['full E-value'], ascending = True)
+        df = df.sort_values(by = ['full score'], ascending = False)
         for hit in df[header].values[0:numHits]:
             yield hit
 
@@ -225,11 +227,12 @@ def numTblout(tblout, numHits, evalueT, bitT, sort):
         line.append(desc)
         # ID and scores
         ID = line[0]
-        evalue, bitscore = float(line[4]), float(line[5])
+        line[4], line[5] = float(line[4]), float(line[5])
+        evalue, bitscore = line[4], line[5]
         line[4], line[5] = evalue, bitscore
         if ID != prev:
             if len(hits) > 0:
-                for hit in top_hits(hits, numHits, 4, False):
+                for hit in top_hits(hits, numHits, 5, True):
                     yield hit
             hits = []
         if evalueT == False and bitT == False:
@@ -241,7 +244,7 @@ def numTblout(tblout, numHits, evalueT, bitT, sort):
         elif evalueT == False and bit >= bitT:
             hits.append(line)
         prev = ID
-    for hit in top_hits(hits, numHits, 4, False):
+    for hit in top_hits(hits, numHits, 5, True):
         yield hit
 
 if __name__ == '__main__':
