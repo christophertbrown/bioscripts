@@ -38,7 +38,7 @@ def md5check(f, ftp, md5, exclude):
     files = glob(f)
     # if no md5 file is specified: download files if path does not exist
     if md5 is False:
-        iflen(files) == 0:
+        if len(files) == 0:
             return False
         print('## already downloaded:', f)
         return True
