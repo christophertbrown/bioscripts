@@ -15,7 +15,7 @@ from glob import glob as glob
 from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
-def calcMD5(path):
+def calcMD5(path, md5):
     """
     calc MD5 based on path
     """
@@ -23,14 +23,20 @@ def calcMD5(path):
     if os.path.exists(path) is False:
         yield False
     else:
-        command = ['md5sum', path]
+        command = [md5, path]
         p = Popen(command, stdout = PIPE)
         for line in p.communicate()[0].splitlines():
-            yield line.decode('ascii').strip().split()[0]
+            line = line.decode('ascii').strip().split()
+            # check if `md5` output
+            if line[0] == 'MD5':
+                yield line[-1]
+            # else assume md5sum output
+            else:
+                yield line[0]
         p.wait()
         yield False
 
-def md5check(f, ftp, md5, exclude):
+def md5check(f, ftp, md5, md5p, exclude):
     """
     * comfirm that downloaded files match md5 checksum on server
     * if md5 is False, only check path for the download
@@ -51,7 +57,8 @@ def md5check(f, ftp, md5, exclude):
     except:
         return False
     ## filter for md5 files that match file type
-    md5 = md5[md5['file'].str.endswith(f.rsplit('*', 1)[-1])]
+    t = f.split('*')[1]
+    md5 = md5[md5['file'].str.contains(t)]
     ## remove preceding characters from file paths
     md5['file'] = [i.replace('./', '') for i in md5['file']]
     ## exclude md5s for sub directories
@@ -59,7 +66,7 @@ def md5check(f, ftp, md5, exclude):
     ## exclude files
     md5 = md5[~md5['file'].str.contains(exclude.replace('*', ''))]
     # get local md5s
-    md5['local md5'] = [[j for j in calcMD5(i)][0] for i in md5['file']]
+    md5['local md5'] = [[j for j in calcMD5(i, md5p)][0] for i in md5['file']]
     # return false if md5s do not match
     for i, File in md5.iterrows():
         if File['ftp md5'] != File['local md5']:
@@ -71,7 +78,9 @@ def md5check(f, ftp, md5, exclude):
     print('## already downloaded:', f)
     return True
 
-def wget(ftp, f = False, exclude = False, name = False, md5 = False, tries = 10):
+
+def wget(ftp, f = False, exclude = False, name = False,
+         md5 = False, md5p = 'md5sum', tries = 10):
     """
     download files with wget
     """
@@ -81,7 +90,7 @@ def wget(ftp, f = False, exclude = False, name = False, md5 = False, tries = 10)
     # downloaded file if it does not already exist
     # check md5s on server (optional)
     t = 0
-    while md5check(f, ftp, md5, exclude) is not True:
+    while md5check(f, ftp, md5, md5p, exclude) is not True:
         t += 1
         if name is not False:
             print('# downloading:', name, f)
@@ -170,7 +179,7 @@ def getFTPs(accessions, ftp, search, exclude, convert = False, threads = 1, atte
             Gftp = genomeInfo[19]
             Gftp = Gftp + '/' + search
             allMatches.extend(matches)
-            yield (Gftp, f, exclude, matches)
+            yield [Gftp, f, exclude, matches]
     # print accessions that could not be matched
     # and whether or not they could be converted (optional)
     newAccs = []
@@ -197,18 +206,19 @@ def getFTPs(accessions, ftp, search, exclude, convert = False, threads = 1, atte
 def wgetGenome(pars, md5 = 'md5checksums.txt'):
     """
     """
-    ftp, f, exclude, matches = pars
+    ftp, f, exclude, matches, md5p = pars
     name = ';'.join(list(matches))
-    return wget(ftp, f, exclude, name, md5 = md5)
+    return wget(ftp, f, exclude, name, md5 = md5, md5p = md5p)
 
 def download(args):
     """
     download genomes from NCBI
     """
     accessions, infoFTP = set(args['g']), args['i']
-    search, exclude = args['s'], args['e']
+    search, exclude, md5p = args['s'], args['e'], args['m']
     FTPs = getFTPs(accessions, infoFTP, search, exclude, threads = args['t'],
             convert = args['convert'])
+    FTPs = [ftp + [md5p] for ftp in FTPs]
     if args['test'] is True:
         for genome in FTPs:
             print('found:', ';'.join(genome[-1]), genome[0])
@@ -236,6 +246,9 @@ if __name__ == '__main__':
     parser.add_argument(\
             '-i', default = ftp,
             required = False, help = 'genome info FTP (default: %s)' % (ftp))
+    parser.add_argument(\
+            '-m', default = 'md5sum', type = str,
+            required = False, help = 'md5 program (default = md5sum, md5 on Mac)')
     parser.add_argument(\
             '-t', default = 3, type = int,
             required = False, help = 'threads (default = 3)')
