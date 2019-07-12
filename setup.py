@@ -4,7 +4,7 @@
 
 from distutils.core import setup
 
-version = '0.44'
+version = '0.45'
 
 packages = ['ctbBio']
 
@@ -21,7 +21,7 @@ scripts = ['ctbBio/16SfromHMM.py', 'ctbBio/23SfromHMM.py', 'ctbBio/numblast.py',
            'ctbBio/rc.py', 'ctbBio/rp16.py', 'ctbBio/rp16_retreive.sh', 'ctbBio/sam2fastq.py', 'ctbBio/search.py',
            'ctbBio/shuffle_genome.py', 'ctbBio/sixframe.py', 'ctbBio/stats.py', 'ctbBio/stockholm2fa.py',
            'ctbBio/stockholm2oneline.py', 'ctbBio/strip_align.py', 'ctbBio/strip_align_inserts.py',
-           'ctbBio/strip_masked.py', 'ctbBio/subset_sam.py', 'ctbBio/transform.py',
+           'ctbBio/strip_masked.py', 'ctbBio/subset_sam.py', 'ctbBio/subset_reads.py', 'ctbBio/transform.py',
            'ctbBio/unmapped.py', 'ctbBio/rRNA_insertions_gff.py',
            'ctbBio/ncbi_download.py']
 
