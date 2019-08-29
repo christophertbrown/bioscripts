@@ -36,7 +36,6 @@ from itertools import permutations as permutations
 
 #ctbBio
 from ctbBio.search import search as search
-#from ctbBio.numblast import best as gethits
 from ctbBio.fasta import iterate_fasta as parse_fasta
 from ctbBio.rec_best_blast import rec_hits as rec_best_blast
 
@@ -97,7 +96,7 @@ def rec_hits(outfile):
     for hit in rec_best_blast(outfile, evalue = e, bit = bit):
         hit = hit.split('\t')
         query, match = hit[0].split()[0], hit[1].split()[0]
-        length, pidnet, evalue, bitscore = hit[3], hit[2], hit[10], hit[11]
+        length, pidnet, evalue, bitscore = hit[3], hit[2], hit[-2], hit[-1]
         info = [length, pidnet, evalue, bitscore]
         genes[query][1][match] = [1, info]
 
