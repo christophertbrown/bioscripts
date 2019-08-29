@@ -14,20 +14,20 @@ def rec_hits(blast, evalue = float(0.01), bit = False):
 	for out in blast:
 		out = open(out)
 		for hit in bestblast(out, 1, evalue, bit):
-			query, match = hit[0].split()[0], hit[1]
+			query, match = hit[0].split()[0], hit[1].split()[0]
 			if query not in genes:
 				genes[query] = {}
 			genes[query][match] = 0
 	for out in blast:
 		out = open(out)
 		for hit in bestblast(out, 1, evalue, bit):
-			query, match = hit[0].split()[0], hit[1]
+			query, match = hit[0].split()[0], hit[1].split()[0]
 			if match in genes and query in genes[match]:
 				genes[match][query] = 1
 	for out in blast:
 		out = open(out)
 		for hit in bestblast(out, 1, evalue, bit):
-			query, match = hit[0].split()[0], hit[1]
+			query, match = hit[0].split()[0], hit[1].split()[0]
 			if genes[query][match] == 1:
 				rec_hits.append('\t'.join(hit))
 	return set(rec_hits)

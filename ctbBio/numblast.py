@@ -22,9 +22,9 @@ def best(blast, max, evalue = False, bit = False):
             line[10] = line[11] = float(line[2])
         else:
             line[10], line[11] = float(line[10]), float(line[11])
-        id = line[0]
+        ID = line[0].split()[0]
 #        line.append(float(line[10]) / -1)
-        if id != prev:
+        if ID != prev:
             if len(hits) > 0:
                 for hit in top_hits(hits, max):
                     yield hit
@@ -37,7 +37,7 @@ def best(blast, max, evalue = False, bit = False):
             hits.append(line)
         elif evalue == False and line[11] >= bit:
             hits.append(line)
-        prev = id
+        prev = ID
     for hit in top_hits(hits, max):
         yield hit
 
