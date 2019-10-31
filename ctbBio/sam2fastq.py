@@ -36,6 +36,7 @@ def sam2fastq(sam, singles = False, force = False):
                 for i in bin(int(line[1])).split('b')[1][::-1]]
         while len(bit) < 8:
             bit.append(False)
+        bit = bit[0:8]
         pair, proper, na, nap, rev, mrev, left, right = bit
         # make sure read is paired
         if pair is False:
